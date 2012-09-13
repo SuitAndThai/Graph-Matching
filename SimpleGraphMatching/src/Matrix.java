@@ -82,19 +82,49 @@ public class Matrix {
 	}
 
 	public Matrix delete(int i) {
-		Matrix rowDeleted = deleteRow(i);
-		Matrix colDeleted = rowDeleted.deleteCol(i);
+		Matrix colDeleted = deleteCol(i);
+		Matrix rowDeleted = colDeleted.deleteRow(i);
 
-		return colDeleted;
+		return rowDeleted;
 	}
 
-	private Matrix deleteCol(int i) {
-		// TODO Auto-generated method stub
-		return null;
+	public Matrix deleteCol(int i) {
+		Matrix m = new Matrix(rows, cols - 1);
+
+		for (int col = 0; col < i; col++) {
+			for (int row = 0; row < rows; row++) {
+				m.setElement(row, col, getElement(row, col));
+			}
+		}
+
+		// skips the column that we've deleted
+
+		for (int col = i; col < cols - 1; col++) {
+			for (int row = 0; row < rows; row++) {
+				m.setElement(row, col, getElement(row, col + 1));
+			}
+		}
+
+		return m;
 	}
 
-	private Matrix deleteRow(int i) {
-		// TODO Auto-generated method stub
-		return null;
+	public Matrix deleteRow(int i) {
+		Matrix m = new Matrix(rows - 1, cols);
+
+		for (int row = 0; row < i; row++) {
+			for (int col = 0; col < cols; col++) {
+				m.setElement(row, col, getElement(row, col));
+			}
+		}
+
+		// skips the row that we've deleted
+
+		for (int row = i; row < rows - 1; row++) {
+			for (int col = 0; col < cols; col++) {
+				m.setElement(row, col, getElement(row + 1, col));
+			}
+		}
+
+		return m;
 	}
 }

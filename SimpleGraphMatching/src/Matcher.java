@@ -1,12 +1,9 @@
-import org.ejml.data.DenseMatrix64F;
-
 public class Matcher {
 
-	public boolean isSubMatrix(DenseMatrix64F d1, DenseMatrix64F d2) {
+	public static boolean isSubMatrix(Matrix M, Matrix m) {
 
-		// figure out the difference in dimensions
-		
-		
+		// figure out the difference in dimensions, assume square
+		int d = M.getRows() - m.getRows(); 
 
 		// pick out a row + column to ignore (as many as the difference in dim)
 
