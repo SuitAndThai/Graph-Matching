@@ -40,6 +40,19 @@ public class Matrix {
 
 		return s;
 	}
+	
+	public int[] getRow(int i) {
+		return mat[i];
+	}
+	
+	public int[] getCol(int i) {
+		int[] col = new int[rows];
+		for (int j = 0; j < rows; j++) {
+			col[j] = mat[j][i];
+		}
+		
+		return col;
+	}
 
 	public void print() {
 		System.out.println(toString());

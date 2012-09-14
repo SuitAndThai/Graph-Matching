@@ -1,11 +1,7 @@
-import java.util.Random;
-
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.ops.RandomMatrices;
 
 public class MatrixGenerator {
 	static Matrix randomMatrix(int size) {
-		Matrix m = Matrix.generateRandomSquare(5);
+		Matrix m = Matrix.generateRandomSquare(size);
 		return m;
 		// Random rand = new Random();
 		// return RandomMatrices.createRandom(size, size, rand);
