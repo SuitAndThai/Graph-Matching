@@ -1,19 +1,12 @@
 package graph;
 
-public class Graph {
-	
-	private Node root;
-	
-	public Graph(Node root) {
-		this.root = root;
-	}
-	
-	public Node getRoot() {
-		return this.root;
-	}
+import java.util.ArrayList;
 
-	public String toString() {
-		return this.root.toString();
+public class Graph {
+	private ArrayList<Node> nodes;
+	
+	public ArrayList<Node> getNodes() {
+		return this.nodes;
 	}
 
 }

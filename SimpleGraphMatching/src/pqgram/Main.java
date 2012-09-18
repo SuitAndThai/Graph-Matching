@@ -2,6 +2,7 @@ package pqgram;
 
 import graph.Graph;
 import graph.Node;
+import graph.Tree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,19 +21,24 @@ public class Main {
 			}
 			System.out.println();
 		}
+		System.out.println();
 	}
 
 	public static void main(String[] args) {
-		Graph g = makeT1();
-		Graph g2 = makeT2();
+		Tree g = makeT1();
+		Tree g2 = makeT2();
 		int p = 2;
 		int q = 3;
 		System.out.println(dist(g, g2, p, q));
 	}
 	
-	public static double dist(Graph T1, Graph T2, int p, int q) {
+	public static double dist(Tree T1, Tree T2, int p, int q) {
 		ArrayList<String[]> index = pqGramIndex(T1, p, q);
+		System.out.println("T1 pq-Gram (p = " + p + ", q = " + q);
+		printI(index);
 		ArrayList<String[]> index2 = pqGramIndex(T2, p, q);
+		System.out.println("T2 pq-Gram (p = " + p + ", q = " + q);
+		printI(index2);
 		ArrayList<String[]> mUnion = multiUnion(index, index2);
 		System.out.println("u: " + mUnion.size());
 		ArrayList<String[]> mIntersection = multiIntersection(index, index2);
@@ -74,11 +80,11 @@ public class Main {
 		return mUnion;
 	}
 
-	private static ArrayList<String[]> pqGramIndex(Graph g, int p, int q) {
+	private static ArrayList<String[]> pqGramIndex(Tree t, int p, int q) {
 		ArrayList<String[]> I = new ArrayList<String[]>();
 		String[] stem = new String[p];
 		Arrays.fill(stem, STAR_LABEL);
-		I = index(g, p, q, I, g.getRoot(), stem);
+		I = index(t, p, q, I, t.getRoot(), stem);
 		return I;
 	}
 
@@ -123,7 +129,7 @@ public class Main {
 		return newArr;
 	}
 
-	private static Graph makeT1() {
+	private static Tree makeT1() {
 		Node v1 = new Node("a");
 		Node v2 = new Node("a");
 		Node v3 = new Node("e");
@@ -138,10 +144,10 @@ public class Main {
 		v2.add(v3);
 		v2.add(v4);
 
-		return new Graph(v1);
+		return new Tree(v1);
 	}
 	
-	private static Graph makeT2() {
+	private static Tree makeT2() {
 		Node w5 = new Node("a");
 		Node w1 = new Node("a");
 		Node w3 = new Node("b");
@@ -156,6 +162,6 @@ public class Main {
 		w1.add(w7);
 		w1.add(w9);
 		
-		return new Graph(w5);
+		return new Tree(w5);
 	}
 }

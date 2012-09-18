@@ -6,17 +6,17 @@ public class Node {
 	private String label;
 	private ArrayList<Node> adjacentNodes;
 	
+	public Node(String label) {
+		this.label = label;
+		this.adjacentNodes = new ArrayList<Node>();
+	}
+	
 	public void add(Node node) {
 		adjacentNodes.add(node);
 	}
 	
 	public ArrayList<Node> getChildren() {
 		return this.adjacentNodes;
-	}
-	
-	public Node(String label) {
-		this.label = label;
-		this.adjacentNodes = new ArrayList<Node>();
 	}
 	
 	public String getLabel() {
