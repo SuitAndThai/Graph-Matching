@@ -3,20 +3,18 @@ import java.util.Random;
 public class Matrix {
 
 	private int[][] mat;
-	private int rows;
-	private int cols;
+	private int numRows;
+	private int numColumns;
 
 	// assumes square
 	public Matrix(int size) {
-		mat = new int[size][size];
-		rows = size;
-		cols = size;
+		this(size, size);
 	}
 
-	public Matrix(int r, int c) {
-		rows = r;
-		cols = c;
-		mat = new int[rows][cols];
+	public Matrix(int numRows, int numColumns) {
+		this.numRows = numRows;
+		this.numColumns = numColumns;
+		mat = new int[numRows][numColumns];
 	}
 
 	public void setElement(int row, int col, int value) {
@@ -29,10 +27,10 @@ public class Matrix {
 
 	public String toString() {
 		String s = "";
-		s += "numRows = " + rows + " numCols = " + cols + "\n";
+		s += "numRows = " + numRows + " numCols = " + numColumns + "\n";
 
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
+		for (int row = 0; row < numRows; row++) {
+			for (int col = 0; col < numColumns; col++) {
 				s += mat[row][col] + " ";
 			}
 			s += "\n";
@@ -46,8 +44,8 @@ public class Matrix {
 	}
 	
 	public int[] getCol(int i) {
-		int[] col = new int[rows];
-		for (int j = 0; j < rows; j++) {
+		int[] col = new int[numRows];
+		for (int j = 0; j < numRows; j++) {
 			col[j] = mat[j][i];
 		}
 		
@@ -58,12 +56,12 @@ public class Matrix {
 		System.out.println(toString());
 	}
 
-	public int getRows() {
-		return rows;
+	public int getNumberOfRows() {
+		return numRows;
 	}
 
-	public int getCols() {
-		return cols;
+	public int getNumberOfColumns() {
+		return numColumns;
 	}
 
 	public static Matrix generateRandomSquare(int size) {
@@ -80,8 +78,8 @@ public class Matrix {
 	}
 
 	public Matrix clone() {
-		int r = getRows();
-		int c = getCols();
+		int r = getNumberOfRows();
+		int c = getNumberOfColumns();
 
 		Matrix m = new Matrix(r, c);
 
@@ -95,25 +93,25 @@ public class Matrix {
 	}
 
 	public Matrix delete(int i) {
-		Matrix colDeleted = deleteCol(i);
+		Matrix colDeleted = deleteColumn(i);
 		Matrix rowDeleted = colDeleted.deleteRow(i);
 
 		return rowDeleted;
 	}
 
-	public Matrix deleteCol(int i) {
-		Matrix m = new Matrix(rows, cols - 1);
+	public Matrix deleteColumn(int i) {
+		Matrix m = new Matrix(numRows, numColumns - 1);
 
 		for (int col = 0; col < i; col++) {
-			for (int row = 0; row < rows; row++) {
+			for (int row = 0; row < numRows; row++) {
 				m.setElement(row, col, getElement(row, col));
 			}
 		}
 
 		// skips the column that we've deleted
 
-		for (int col = i; col < cols - 1; col++) {
-			for (int row = 0; row < rows; row++) {
+		for (int col = i; col < numColumns - 1; col++) {
+			for (int row = 0; row < numRows; row++) {
 				m.setElement(row, col, getElement(row, col + 1));
 			}
 		}
@@ -122,18 +120,18 @@ public class Matrix {
 	}
 
 	public Matrix deleteRow(int i) {
-		Matrix m = new Matrix(rows - 1, cols);
+		Matrix m = new Matrix(numRows - 1, numColumns);
 
 		for (int row = 0; row < i; row++) {
-			for (int col = 0; col < cols; col++) {
+			for (int col = 0; col < numColumns; col++) {
 				m.setElement(row, col, getElement(row, col));
 			}
 		}
 
 		// skips the row that we've deleted
 
-		for (int row = i; row < rows - 1; row++) {
-			for (int col = 0; col < cols; col++) {
+		for (int row = i; row < numRows - 1; row++) {
+			for (int col = 0; col < numColumns; col++) {
 				m.setElement(row, col, getElement(row + 1, col));
 			}
 		}

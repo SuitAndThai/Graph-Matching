@@ -4,8 +4,8 @@ public class Matcher {
 	
 	public static int[] matchNodes(Matrix S) {
 		// Number of rows <= Number of columns
-		int numRows = S.getRows();
-		int numCols = S.getCols();
+		int numRows = S.getNumberOfRows();
+		int numCols = S.getNumberOfColumns();
 		
 		int[] matches = new int[numRows];
 		ArrayList<Integer> tabu = new ArrayList<Integer>();
@@ -31,14 +31,14 @@ public class Matcher {
 	}
 
 	public static Matrix getSimilarityMatrix(Matrix A, Matrix B) {
-		if (B.getRows() < A.getRows()) {
+		if (B.getNumberOfRows() < A.getNumberOfRows()) {
 			return getSimilarityMatrix(B, A);
 		}
-		Matrix S = new Matrix(A.getRows(), B.getCols());
+		Matrix S = new Matrix(A.getNumberOfRows(), B.getNumberOfColumns());
 		
 		int score;
-		for (int row = 0; row < A.getRows(); row++) {
-			for (int col = 0; col < B.getCols(); col++) {
+		for (int row = 0; row < A.getNumberOfRows(); row++) {
+			for (int col = 0; col < B.getNumberOfColumns(); col++) {
 				score = getSimilarityScore(A.getRow(row), A.getCol(row), B.getRow(col), B.getCol(col));
 				S.setElement(row, col, score);
 			}
