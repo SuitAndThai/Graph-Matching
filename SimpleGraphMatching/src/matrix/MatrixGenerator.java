@@ -1,6 +1,8 @@
+package matrix;
+
 
 public class MatrixGenerator {
-	static Matrix randomMatrix(int size) {
+	public static Matrix randomMatrix(int size) {
 		Matrix m = Matrix.generateRandomSquare(size);
 		return m;
 		// Random rand = new Random();

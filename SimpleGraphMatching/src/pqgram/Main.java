@@ -1,7 +1,7 @@
 package pqgram;
 
 import graph.Graph;
-import graph.Node;
+import graph.Tree;
 import graph.Tree;
 
 import java.util.ArrayList;
@@ -34,10 +34,10 @@ public class Main {
 	
 	public static double dist(Tree T1, Tree T2, int p, int q) {
 		ArrayList<String[]> index = pqGramIndex(T1, p, q);
-		System.out.println("T1 pq-Gram (p = " + p + ", q = " + q);
+		System.out.println("T1 pq-Gram (p = " + p + ", q = " + q + ")");
 		printI(index);
 		ArrayList<String[]> index2 = pqGramIndex(T2, p, q);
-		System.out.println("T2 pq-Gram (p = " + p + ", q = " + q);
+		System.out.println("T2 pq-Gram (p = " + p + ", q = " + q + ")");
 		printI(index2);
 		ArrayList<String[]> mUnion = multiUnion(index, index2);
 		System.out.println("u: " + mUnion.size());
@@ -84,19 +84,19 @@ public class Main {
 		ArrayList<String[]> I = new ArrayList<String[]>();
 		String[] stem = new String[p];
 		Arrays.fill(stem, STAR_LABEL);
-		I = index(t, p, q, I, t.getRoot(), stem);
+		I = index(t, p, q, I, t, stem);
 		return I;
 	}
 
-	private static ArrayList<String[]> index(Graph g, int p, int q,
-			ArrayList<String[]> I, Node a, String[] stem) {
+	private static ArrayList<String[]> index(Tree g, int p, int q,
+			ArrayList<String[]> I, Tree a, String[] stem) {
 		String[] base = new String[q];
 		Arrays.fill(base, STAR_LABEL);
 		stem = shift(stem, a.getLabel());
 		if (a.isLeaf()) {
 			I.add(concat(stem, base));
 		} else {
-			for (Node c : a.getChildren()) {
+			for (Tree c : a.getChildren()) {
 				base = shift(base, c.getLabel());
 				I.add(concat(stem, base));
 				I = index(g, p, q, I, c, stem);
@@ -130,38 +130,38 @@ public class Main {
 	}
 
 	private static Tree makeT1() {
-		Node v1 = new Node("a");
-		Node v2 = new Node("a");
-		Node v3 = new Node("e");
-		Node v4 = new Node("b");
-		Node v5 = new Node("b");
-		Node v6 = new Node("c");
+		Tree v1 = new Tree("a");
+		Tree v2 = new Tree("a");
+		Tree v3 = new Tree("e");
+		Tree v4 = new Tree("b");
+		Tree v5 = new Tree("b");
+		Tree v6 = new Tree("c");
 
-		v1.add(v2);
-		v1.add(v5);
-		v1.add(v6);
+		v1.addChild(v2);
+		v1.addChild(v5);
+		v1.addChild(v6);
 
-		v2.add(v3);
-		v2.add(v4);
+		v2.addChild(v3);
+		v2.addChild(v4);
 
-		return new Tree(v1);
+		return v1;
 	}
 	
 	private static Tree makeT2() {
-		Node w5 = new Node("a");
-		Node w1 = new Node("a");
-		Node w3 = new Node("b");
-		Node w6 = new Node("d");
-		Node w7 = new Node("e");
-		Node w9 = new Node("b");
+		Tree w5 = new Tree("a");
+		Tree w1 = new Tree("a");
+		Tree w3 = new Tree("b");
+		Tree w6 = new Tree("d");
+		Tree w7 = new Tree("e");
+		Tree w9 = new Tree("b");
 		
-		w5.add(w1);
-		w5.add(w3);
-		w5.add(w6);
+		w5.addChild(w1);
+		w5.addChild(w3);
+		w5.addChild(w6);
 		
-		w1.add(w7);
-		w1.add(w9);
+		w1.addChild(w7);
+		w1.addChild(w9);
 		
-		return new Tree(w5);
+		return w5;
 	}
 }
