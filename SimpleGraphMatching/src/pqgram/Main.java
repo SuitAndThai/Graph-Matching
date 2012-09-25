@@ -34,15 +34,9 @@ public class Main {
 	
 	public static double dist(Tree T1, Tree T2, int p, int q) {
 		ArrayList<String[]> index = pqGramIndex(T1, p, q);
-		System.out.println("T1 pq-Gram (p = " + p + ", q = " + q + ")");
-		printI(index);
 		ArrayList<String[]> index2 = pqGramIndex(T2, p, q);
-		System.out.println("T2 pq-Gram (p = " + p + ", q = " + q + ")");
-		printI(index2);
 		ArrayList<String[]> mUnion = multiUnion(index, index2);
-		System.out.println("u: " + mUnion.size());
 		ArrayList<String[]> mIntersection = multiIntersection(index, index2);
-		System.out.println("i: " + mIntersection.size());
 		return (mUnion.size() - 2.0 * mIntersection.size()) / (mUnion.size() - mIntersection.size());
 	}
 	
