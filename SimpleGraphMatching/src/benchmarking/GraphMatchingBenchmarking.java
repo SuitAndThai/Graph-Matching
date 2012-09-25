@@ -1,6 +1,5 @@
 package benchmarking;
 
-import static org.junit.Assert.fail;
 import graph.Tree;
 
 import java.lang.management.ManagementFactory;
@@ -17,11 +16,11 @@ import org.junit.Test;
 public class GraphMatchingBenchmarking {
 	private static int P = 2;
 	private static int Q = 3;
-	
-	private long getCpuTime( ) {
-	    ThreadMXBean bean = ManagementFactory.getThreadMXBean( );
-	    return bean.isCurrentThreadCpuTimeSupported( ) ?
-	        bean.getCurrentThreadCpuTime( ) : 0L;
+
+	private long getCpuTime() {
+		ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+		return bean.isCurrentThreadCpuTimeSupported() ? bean
+				.getCurrentThreadCpuTime() : 0L;
 	}
 
 	@Before
@@ -31,7 +30,7 @@ public class GraphMatchingBenchmarking {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
+
 	private String[] makeLabels(int n) {
 		String[] labels = new String[n];
 		Random rand = new Random();
@@ -40,34 +39,38 @@ public class GraphMatchingBenchmarking {
 		}
 		return labels;
 	}
-	
+
 	public long[] getTimes(int n) throws InterruptedException {
-		Tree t1 = Tree.makeRandomTree(n, makeLabels(n/2));
-		Tree t2 = Tree.makeRandomTree(n, makeLabels(n/2));
+		Tree t1 = Tree.makeRandomTree(n, makeLabels(n / 2));
+		Tree t2 = Tree.makeRandomTree(n, makeLabels(n / 2));
 		Matrix m1 = Tree.getMatrix(t1);
 		Matrix m2 = Tree.getMatrix(t2);
-		
+
 		long[] times = new long[2];
 		long startTime, endTime;
-		
+
 		// pq-Gram
 		startTime = getCpuTime();
 		pqgram.Main.dist(t1, t2, P, Q);
 		endTime = getCpuTime();
 		times[0] = endTime - startTime;
 		System.out.println("*spoiler* pq-time: " + times[0]);
-		
+
 		// similarity matrix
 		startTime = getCpuTime();
 		Matcher.match(m1, m2);
 		endTime = getCpuTime();
 		times[1] = endTime - startTime;
-		
+
+		// System.out.println("Maple code:\n");
+		// System.out.println(m1.toMapleCode(1));
+		// System.out.println(m2.toMapleCode(2));
+
 		return times;
 	}
-	
+
 	@Test
-	public void benchmarkTen() {
+	public void benchmarkHundred() {
 		benchmark(100);
 	}
 

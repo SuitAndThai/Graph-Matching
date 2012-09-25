@@ -1,4 +1,5 @@
 package matrix;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -174,5 +175,54 @@ public class Matrix {
 		}
 
 		return temp;
+	}
+
+	// this code is intended for triangular matrices to write the code to create
+	// trees for maple
+	public String toMapleCode(int n) {
+		String output = "";
+		int[][] tempMat = new int[numRows][numColumns];
+
+		// zero out the matrix
+		for (int row = 0; row < numRows; row++) {
+			for (int col = 0; col < numColumns; col++) {
+				tempMat[row][col] = 0;
+			}
+		}
+
+		// making the matrix symmetric
+		for (int row = 0; row < numRows; row++) {
+			for (int col = 0; col < numColumns; col++) {
+				if (mat[row][col] > 0) {
+					tempMat[row][col] = mat[row][col];
+					tempMat[col][row] = mat[row][col];
+				}
+			}
+		}
+		if (1 == n) {
+			output += "restart; with(GraphTheory):\n";
+		}
+		output += "G" + n + ":=Graph(<";
+
+		for (int col = 0; col < numColumns; col++) {
+			output += "<";
+			for (int row = 0; row < numRows; row++) {
+				output += ("" + tempMat[row][col]);
+
+				if (row < numRows - 1) {
+					output += ",";
+				}
+			}
+			output += ">";
+
+			if (col < numColumns - 1) {
+				output += "|";
+			}
+		}
+
+		output += ">):\n";
+		output += "DrawGraph(G" + n + ");\n";
+
+		return output;
 	}
 }

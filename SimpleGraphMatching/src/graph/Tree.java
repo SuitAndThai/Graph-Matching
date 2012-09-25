@@ -30,7 +30,7 @@ public class Tree {
 	public boolean isLeaf() {
 		return this.children.size() == 0;
 	}
-	
+
 	public int getNumNodes() {
 		int numNodes = 1;
 		for (Tree t : this.children) {
@@ -38,7 +38,7 @@ public class Tree {
 		}
 		return numNodes;
 	}
-	
+
 	public List<String> getLabels() {
 		List<String> labels = new ArrayList<String>();
 		labels.add(this.label);
@@ -47,7 +47,7 @@ public class Tree {
 		}
 		return labels;
 	}
-	
+
 	public List<Tree> getTrees() {
 		List<Tree> trees = new ArrayList<Tree>();
 		trees.add(this);
@@ -64,7 +64,7 @@ public class Tree {
 			treeString.append("\n");
 		}
 		for (Tree child : this.children) {
-			treeString.append(this.label+":"+child.toString());
+			treeString.append(this.label + ":" + child.toString());
 			treeString.append("\n");
 		}
 		return treeString.toString();
@@ -96,7 +96,7 @@ public class Tree {
 		int numNodes = trees.size();
 		String[] labels = new String[trees.size()];
 		for (int i = 0; i < numNodes; i++) {
-			labels[i] = trees.get(i).getLabel(); 
+			labels[i] = trees.get(i).getLabel();
 		}
 		Matrix m = new Matrix(numNodes, (String[]) labels);
 		for (int i = 0; i < numNodes; i++) {

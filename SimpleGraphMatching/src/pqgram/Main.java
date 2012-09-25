@@ -1,15 +1,13 @@
 package pqgram;
 
-import graph.Graph;
 import graph.Tree;
-import graph.Tree;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
 	private static String STAR_LABEL = null;
-	
+
+	@SuppressWarnings("unused")
 	private static void printI(ArrayList<String[]> I) {
 		for (String[] tup : I) {
 			for (int i = 0; i < tup.length; i++) {
@@ -31,15 +29,16 @@ public class Main {
 		int q = 3;
 		System.out.println(dist(g, g2, p, q));
 	}
-	
+
 	public static double dist(Tree T1, Tree T2, int p, int q) {
 		ArrayList<String[]> index = pqGramIndex(T1, p, q);
 		ArrayList<String[]> index2 = pqGramIndex(T2, p, q);
 		ArrayList<String[]> mUnion = multiUnion(index, index2);
 		ArrayList<String[]> mIntersection = multiIntersection(index, index2);
-		return (mUnion.size() - 2.0 * mIntersection.size()) / (mUnion.size() - mIntersection.size());
+		return (mUnion.size() - 2.0 * mIntersection.size())
+				/ (mUnion.size() - mIntersection.size());
 	}
-	
+
 	private static String join(String[] strs, String delim) {
 		String jStr = strs[0];
 		for (int i = 1; i < strs.length; i++) {
@@ -47,8 +46,9 @@ public class Main {
 		}
 		return jStr;
 	}
-	
-	private static ArrayList<String[]> multiIntersection(ArrayList<String[]> I1, ArrayList<String[]> I2) {
+
+	private static ArrayList<String[]> multiIntersection(
+			ArrayList<String[]> I1, ArrayList<String[]> I2) {
 		if (I2.size() < I1.size()) {
 			return multiIntersection(I2, I1);
 		}
@@ -66,9 +66,11 @@ public class Main {
 		}
 		return mIntersection;
 	}
-	
-	private static ArrayList<String[]> multiUnion(ArrayList<String[]> I1, ArrayList<String[]> I2) {
-		ArrayList<String[]> mUnion = new ArrayList<String[]>(I1.size() + I2.size());
+
+	private static ArrayList<String[]> multiUnion(ArrayList<String[]> I1,
+			ArrayList<String[]> I2) {
+		ArrayList<String[]> mUnion = new ArrayList<String[]>(I1.size()
+				+ I2.size());
 		mUnion.addAll(I1);
 		mUnion.addAll(I2);
 		return mUnion;
@@ -140,7 +142,7 @@ public class Main {
 
 		return v1;
 	}
-	
+
 	private static Tree makeT2() {
 		Tree w5 = new Tree("a");
 		Tree w1 = new Tree("a");
@@ -148,14 +150,14 @@ public class Main {
 		Tree w6 = new Tree("d");
 		Tree w7 = new Tree("e");
 		Tree w9 = new Tree("b");
-		
+
 		w5.addChild(w1);
 		w5.addChild(w3);
 		w5.addChild(w6);
-		
+
 		w1.addChild(w7);
 		w1.addChild(w9);
-		
+
 		return w5;
 	}
 }

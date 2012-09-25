@@ -2,15 +2,15 @@ package matrix;
 
 public class Main {
 	public static void main(String[] args) {
-		int n = 100;
-		 Matrix m = Matrix.generateRandomSquare(n);
-//		Matrix m = makeT1();
+		int n = 50;
+		Matrix m = Matrix.generateRandomSquare(n);
+		// Matrix m = makeT1();
 
 		System.out.println("Starting Matrix:");
 		m.print();
-		 Matrix m2 = m.delete(n - 1);
-		 Matrix m3 = m2.delete(n - 2);
-//		Matrix m3 = makeT2();
+		Matrix m2 = m.delete(n - 1);
+		Matrix m3 = m2.delete(n - 2);
+		// Matrix m3 = makeT2();
 
 		System.out.println("A submatrix:");
 		m3.print();
@@ -18,11 +18,11 @@ public class Main {
 		Matrix S = Matcher.getSimilarityMatrix(m, m3);
 		System.out.println("Similarity matrix");
 		S.print();
-		
-		System.out.println("Rowsums");
-		for (int i = 0; i < S.getNumberOfRows(); i++) {
-			System.out.println(Matcher.vectorSum(S.getRow(i)));
-		}
+
+		// System.out.println("Rowsums");
+		// for (int i = 0; i < S.getNumberOfRows(); i++) {
+		// System.out.println(Matcher.vectorSum(S.getRow(i)));
+		// }
 
 		int[] matches = Matcher.matchNodes(S);
 		int score = 0;
