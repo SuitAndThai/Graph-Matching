@@ -1,7 +1,6 @@
 package matrix;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 
 public class Matcher {
 
@@ -45,7 +44,8 @@ public class Matcher {
 		for (int row = 0; row < A.getNumberOfRows(); row++) {
 			for (int col = 0; col < B.getNumberOfColumns(); col++) {
 				score = getSimilarityScore(A.getRow(row), A.getCol(row),
-						B.getRow(col), B.getCol(col), A.getLabel(row), B.getLabel(col));
+						B.getRow(col), B.getCol(col), A.getLabel(row),
+						B.getLabel(col));
 				S.setElement(row, col, score);
 			}
 		}
@@ -53,7 +53,7 @@ public class Matcher {
 		return S;
 	}
 
-	private static int vectorSum(int[] arr) {
+	public static int vectorSum(int[] arr) {
 		int sum = 0;
 		for (int i = 0; i < arr.length; i++) {
 			sum += arr[i];
@@ -61,12 +61,11 @@ public class Matcher {
 		return sum;
 	}
 
+	// label matching is not counted yet
 	private static int getSimilarityScore(int[] Arow, int[] Acol, int[] Brow,
 			int[] Bcol, String ALabel, String BLabel) {
 		int helperScore = 2;
-		int hurterScore = -1;
-
-		int labelMultiplier = 1;
+		int hurterScore = 1; // this will become negative later
 
 		int ArowSum = vectorSum(Arow);
 		int AcolSum = vectorSum(Acol);
@@ -77,14 +76,16 @@ public class Matcher {
 		int minColSum = Math.min(AcolSum, BcolSum);
 		int rowDiff = Math.abs(ArowSum - BrowSum);
 		int colDiff = Math.abs(AcolSum - BcolSum);
-
+		
+		int help = helperScore * (minRowSum + minColSum);
+		int hurt = hurterScore * (rowDiff + colDiff);
+		
+		int labelHelpScore = 0;
+		
 		if (ALabel.equals(BLabel)) {
-			labelMultiplier = 2;
+			labelHelpScore = 1000;
 		}
 
-		return (helperScore * (minRowSum + minColSum) + hurterScore
-				* (rowDiff + colDiff))
-				* labelMultiplier;
+		return (int) (labelHelpScore + 100 *  ((help - hurt) / ((double) (help + hurt))));
 	}
-
 }

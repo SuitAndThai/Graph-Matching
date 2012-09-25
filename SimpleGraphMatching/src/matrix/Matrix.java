@@ -85,7 +85,7 @@ public class Matrix {
 		String[] randomLabels = new String[size];
 
 		for (int i = 0; i < size; i++) {
-			randomLabels[i] = Integer.toString(rand.nextInt(size - 1));
+			randomLabels[i] = Integer.toString(rand.nextInt(size / 2));
 		}
 
 		Matrix m = new Matrix(size, randomLabels);
