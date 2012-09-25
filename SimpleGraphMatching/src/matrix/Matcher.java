@@ -10,24 +10,50 @@ public class Matcher {
 		int numCols = S.getNumberOfColumns();
 
 		int[] matches = new int[numRows];
-		ArrayList<Integer> tabu = new ArrayList<Integer>();
+		ArrayList<Integer> tabuRows = new ArrayList<Integer>();
+		ArrayList<Integer> tabuCols = new ArrayList<Integer>();
 
-		int bestIndex;
-		for (int i = 0; i < numRows; i++) {
-			bestIndex = 0;
-			while (tabu.contains(bestIndex)) {
-				bestIndex++;
-			}
-			for (int j = 0; j < numCols; j++) {
-				if (!tabu.contains(j)) {
-					if (S.getElement(i, j) > S.getElement(i, bestIndex)) {
-						bestIndex = j;
+		for (int n = 0; n < matches.length; n++) {
+			int bestRow = 0;
+			int bestCol = 0;
+			int bestScore = -2000;
+			int nextScore;
+			for (int i = 0; i < numRows; i++) {
+				if (tabuRows.contains(i)) {
+					continue;
+				}
+				for (int j = 0; j < numCols; j++) {
+					if (tabuCols.contains(j)) {
+						continue;
+					}
+					nextScore = S.getElement(i, j);
+					if (nextScore > bestScore) {
+						bestRow = i;
+						bestCol = j;
+						bestScore = nextScore;
 					}
 				}
 			}
-			matches[i] = bestIndex;
-			tabu.add(bestIndex);
+			matches[bestRow] = bestCol;
+			tabuRows.add(bestRow);
+			tabuCols.add(bestCol);
 		}
+
+		// for (int i = 0; i < numRows; i++) {
+		// bestIndex = 0;
+		// while (tabu.contains(bestIndex)) {
+		// bestIndex++;
+		// }
+		// for (int j = 0; j < numCols; j++) {
+		// if (!tabu.contains(j)) {
+		// if (S.getElement(i, j) > S.getElement(i, bestIndex)) {
+		// bestIndex = j;
+		// }
+		// }
+		// }
+		// matches[i] = bestIndex;
+		// tabu.add(bestIndex);
+		// }
 
 		return matches;
 	}
@@ -76,16 +102,16 @@ public class Matcher {
 		int minColSum = Math.min(AcolSum, BcolSum);
 		int rowDiff = Math.abs(ArowSum - BrowSum);
 		int colDiff = Math.abs(AcolSum - BcolSum);
-		
+
 		int help = helperScore * (minRowSum + minColSum);
 		int hurt = hurterScore * (rowDiff + colDiff);
-		
+
 		int labelHelpScore = 0;
-		
+
 		if (ALabel.equals(BLabel)) {
 			labelHelpScore = 1000;
 		}
 
-		return (int) (labelHelpScore + 100 *  ((help - hurt) / ((double) (help + hurt))));
+		return (int) (labelHelpScore + 100 * ((help - hurt) / ((double) (help + hurt))));
 	}
 }
