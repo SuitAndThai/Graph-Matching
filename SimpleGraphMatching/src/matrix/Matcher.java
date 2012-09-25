@@ -39,21 +39,22 @@ public class Matcher {
 			tabuCols.add(bestCol);
 		}
 
-		// for (int i = 0; i < numRows; i++) {
-		// bestIndex = 0;
-		// while (tabu.contains(bestIndex)) {
-		// bestIndex++;
-		// }
-		// for (int j = 0; j < numCols; j++) {
-		// if (!tabu.contains(j)) {
-		// if (S.getElement(i, j) > S.getElement(i, bestIndex)) {
-		// bestIndex = j;
-		// }
-		// }
-		// }
-		// matches[i] = bestIndex;
-		// tabu.add(bestIndex);
-		// }
+//		int bestIndex;
+//		for (int i = 0; i < numRows; i++) {
+//			bestIndex = 0;
+//			while (tabuRows.contains(bestIndex)) {
+//				bestIndex++;
+//			}
+//			for (int j = 0; j < numCols; j++) {
+//				if (!tabuRows.contains(j)) {
+//					if (S.getElement(i, j) > S.getElement(i, bestIndex)) {
+//						bestIndex = j;
+//					}
+//				}
+//			}
+//			matches[i] = bestIndex;
+//			tabuRows.add(bestIndex);
+//		}
 
 		return matches;
 	}
