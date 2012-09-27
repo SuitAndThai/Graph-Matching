@@ -1,6 +1,8 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -79,13 +81,22 @@ public class Tree {
 			numNodes--;
 			int numChildren = 1 + rand.nextInt((int) Math
 					.max(1, numNodes / 2.0));
+			Tree[] children = new Tree[numChildren];
 			for (int i = 0; i < numChildren - 1; i++) {
 				int numDescendants = rand.nextInt((numNodes + 1) / numChildren);
 				numNodes -= (numDescendants + 1);
 				Tree tchild = makeRandomTree(numDescendants + 1, labels);
-				t.addChild(tchild);
+				children[i] = tchild;
 			}
-			t.addChild(makeRandomTree(numNodes, labels));
+			Tree tchild = makeRandomTree(numNodes, labels);
+			children[numChildren-1] = tchild;
+			List<Tree> childrenList = Arrays.asList(children);
+			Collections.shuffle(childrenList);
+			children = (Tree[]) childrenList.toArray();
+			
+			for (int i = 0; i < children.length; i++) {
+				t.addChild(children[i]);
+			}
 		}
 
 		return t;

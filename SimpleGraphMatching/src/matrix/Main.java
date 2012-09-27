@@ -5,6 +5,10 @@ public class Main {
 		int n = 50;
 		Matrix m = Matrix.generateRandomSquare(n);
 		// Matrix m = makeT1();
+		
+		String s = m.toMapleCode(1);
+		System.out.println(s);
+		System.exit(0);
 
 		System.out.println("Starting Matrix:");
 		m.print();
