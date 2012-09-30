@@ -72,36 +72,6 @@ public class Tree {
 		return treeString.toString();
 	}
 
-	public static Tree makeRandomTree(int numNodes, String[] labels) {
-		Random rand = new Random();
-
-		Tree t = new Tree(labels[rand.nextInt(labels.length)]);
-
-		if (numNodes > 1) {
-			numNodes--;
-			int numChildren = 1 + rand.nextInt((int) Math
-					.max(1, numNodes / 2.0));
-			Tree[] children = new Tree[numChildren];
-			for (int i = 0; i < numChildren - 1; i++) {
-				int numDescendants = rand.nextInt((numNodes + 1) / numChildren);
-				numNodes -= (numDescendants + 1);
-				Tree tchild = makeRandomTree(numDescendants + 1, labels);
-				children[i] = tchild;
-			}
-			Tree tchild = makeRandomTree(numNodes, labels);
-			children[numChildren-1] = tchild;
-			List<Tree> childrenList = Arrays.asList(children);
-			Collections.shuffle(childrenList);
-			children = (Tree[]) childrenList.toArray();
-			
-			for (int i = 0; i < children.length; i++) {
-				t.addChild(children[i]);
-			}
-		}
-
-		return t;
-	}
-
 	public static Matrix getMatrix(Tree t) {
 		List<Tree> trees = t.getTrees();
 		int numNodes = trees.size();
@@ -120,5 +90,43 @@ public class Tree {
 			}
 		}
 		return m;
+	}
+	
+	public static int[] getRandomPartition(int n, int numPartitions) {
+		int[] partitions = new int[numPartitions];
+		for (int i = 0; i < partitions.length; i++) {
+			partitions[i] = 1;
+		}
+		Random rand = new Random();
+		for (int j = 0; j < n; j++) {
+			partitions[(rand.nextInt(partitions.length) + rand.nextInt(partitions.length)) % numPartitions]++;
+		}
+		return partitions;
+	}
+
+	public static Tree makeRandomTree(int numNodes, String[] labels) {
+		int minNumChildren = 1;
+		int maxNumChildren = 20;
+		
+		Random rand = new Random();
+		Tree t = new Tree(labels[rand.nextInt(labels.length)]);
+
+		numNodes--;
+
+		if (numNodes > 0) {
+			int numChildren;
+			if (numNodes <= minNumChildren) {
+				numChildren = numNodes;
+			} else {
+				numChildren = Math.min(numNodes, minNumChildren) + rand.nextInt(Math.min(numNodes, maxNumChildren) - Math.min(numNodes, minNumChildren));
+			}
+			numNodes -= numChildren;
+			int[] numDescendants = getRandomPartition(numNodes, numChildren);
+			for (int i = 0; i < numChildren; i++) {
+				t.addChild(makeRandomTree(numDescendants[i], labels));
+			}
+		}
+
+		return t;
 	}
 }

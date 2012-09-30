@@ -181,24 +181,7 @@ public class Matrix {
 	// trees for maple
 	public String toMapleCode(int n) {
 		String output = "";
-		int[][] tempMat = new int[numRows][numColumns];
-
-		// zero out the matrix
-		for (int row = 0; row < numRows; row++) {
-			for (int col = 0; col < numColumns; col++) {
-				tempMat[row][col] = 0;
-			}
-		}
-
-		// making the matrix symmetric
-		for (int row = 0; row < numRows; row++) {
-			for (int col = 0; col < numColumns; col++) {
-				if (mat[row][col] > 0) {
-					tempMat[row][col] = mat[row][col];
-					tempMat[col][row] = mat[row][col];
-				}
-			}
-		}
+		
 		if (1 == n) {
 			output += "restart; with(GraphTheory):\n";
 		}
@@ -207,7 +190,7 @@ public class Matrix {
 		for (int col = 0; col < numColumns; col++) {
 			output += "<";
 			for (int row = 0; row < numRows; row++) {
-				output += ("" + tempMat[row][col]);
+				output += ("" + (mat[row][col] | mat[col][row]));
 
 				if (row < numRows - 1) {
 					output += ",";
