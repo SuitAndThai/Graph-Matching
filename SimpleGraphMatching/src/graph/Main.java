@@ -86,6 +86,10 @@ public class Main {
 		String pqMapleCode = "";
 		pqMapleCode += "pqGramPoints:=[";
 		for (int i = 1; i <= 10; i++) {
+			if (1 != i) {
+				pqMapleCode += ",";
+			}
+
 			pqMapleCode += "[" + i * 100 + ","
 					+ getPQAverage(i * 100, timesToRun) + "]";
 		}
@@ -95,6 +99,10 @@ public class Main {
 		String simMapleCode = "";
 		simMapleCode += "simMatrixPoints:=[";
 		for (int i = 1; i <= 10; i++) {
+			if (1 != i) {
+				simMapleCode += ",";
+			}
+
 			simMapleCode += "[" + i * 100 + ","
 					+ getSimAverage(i * 100, timesToRun) + "]";
 		}
