@@ -2,6 +2,7 @@ package graph;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
+import java.util.ArrayList;
 import java.util.Random;
 
 import matrix.Matcher;
@@ -27,32 +28,77 @@ public class Main {
 		return labels;
 	}
 
+	private static long getPQAverage(int numNodes, int timesToRun) {
+		Tree t1;
+		Tree t2;
+		long[] totalPQ = new long[timesToRun];
+		long totalPQTime = 0;
+
+		for (int i = 0; i < timesToRun; i++) {
+			t1 = Tree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
+			t2 = Tree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
+
+			long startTime, endTime;
+
+			// pq-Gram
+			startTime = getCpuTime();
+			pqgram.Main.dist(t1, t2, P, Q);
+			endTime = getCpuTime();
+			totalPQ[i] = endTime - startTime;
+			totalPQTime += totalPQ[i];
+		}
+
+		return (totalPQTime / timesToRun);
+	}
+
+	private static long getSimAverage(int numNodes, int timesToRun) {
+		Tree t1;
+		Tree t2;
+		Matrix m1;
+		Matrix m2;
+		long[] totalSim = new long[timesToRun];
+		long totalSimTime = 0;
+
+		for (int i = 0; i < timesToRun; i++) {
+			t1 = Tree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
+			t2 = Tree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
+
+			m1 = Tree.getMatrix(t1);
+			m2 = Tree.getMatrix(t2);
+
+			long startTime, endTime;
+
+			// similarity matrix
+			startTime = getCpuTime();
+			Matcher.match(m1, m2);
+			endTime = getCpuTime();
+			totalSim[i] = endTime - startTime;
+			totalSimTime += totalSim[i];
+		}
+
+		return (totalSimTime / timesToRun);
+	}
+
 	public static void main(String[] args) {
-		int numNodes = Integer.parseInt(args[0]);
 
-		Tree t1 = Tree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
-		Tree t2 = Tree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
+		int timesToRun = Integer.parseInt(args[0]);
 
-		Matrix m1 = Tree.getMatrix(t1);
-		Matrix m2 = Tree.getMatrix(t2);
+		String pqMapleCode = "";
+		pqMapleCode += "pqGramPoints:=[";
+		for (int i = 1; i <= 10; i++) {
+			pqMapleCode += "[" + i * 100 + ","
+					+ getPQAverage(i * 100, timesToRun) + "]";
+		}
+		pqMapleCode += "];";
+		System.out.println(pqMapleCode);
 
-		long[] times = new long[2];
-		long startTime, endTime;
-
-		// pq-Gram
-		startTime = getCpuTime();
-		pqgram.Main.dist(t1, t2, P, Q);
-		endTime = getCpuTime();
-		times[0] = endTime - startTime;
-		System.out.println("*spoiler* pq-time: " + times[0]);
-
-		// similarity matrix
-		startTime = getCpuTime();
-		Matcher.match(m1, m2);
-		endTime = getCpuTime();
-		times[1] = endTime - startTime;
-
-		System.out.println("pq time: " + times[0]);
-		System.out.println("sim time: " + times[1]);
+		String simMapleCode = "";
+		simMapleCode += "simMatrixPoints:=[";
+		for (int i = 1; i <= 10; i++) {
+			simMapleCode += "[" + i * 100 + ","
+					+ getSimAverage(i * 100, timesToRun) + "]";
+		}
+		simMapleCode += "];";
+		System.out.println(simMapleCode);
 	}
 }
