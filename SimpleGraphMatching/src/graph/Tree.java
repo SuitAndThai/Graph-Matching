@@ -106,7 +106,7 @@ public class Tree {
 
 	public static Tree makeRandomTree(int numNodes, String[] labels) {
 		int minNumChildren = 1;
-		int maxNumChildren = 20;
+		int maxNumChildren = 30;
 		
 		Random rand = new Random();
 		Tree t = new Tree(labels[rand.nextInt(labels.length)]);

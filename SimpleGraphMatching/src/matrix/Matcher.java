@@ -17,50 +17,50 @@ public class Matcher {
 
 		int[] matches = new int[numRows];
 		ArrayList<Integer> tabuRows = new ArrayList<Integer>();
-		// ArrayList<Integer> tabuCols = new ArrayList<Integer>();
-		//
-		// for (int n = 0; n < matches.length; n++) {
-		// int bestRow = 0;
-		// int bestCol = 0;
-		// int bestScore = -2000;
-		// int nextScore;
-		// for (int i = 0; i < numRows; i++) {
-		// if (tabuRows.contains(i)) {
-		// continue;
-		// }
-		// for (int j = 0; j < numCols; j++) {
-		// if (tabuCols.contains(j)) {
-		// continue;
-		// }
-		// nextScore = S.getElement(i, j);
-		// if (nextScore > bestScore) {
-		// bestRow = i;
-		// bestCol = j;
-		// bestScore = nextScore;
-		// }
-		// }
-		// }
-		// matches[bestRow] = bestCol;
-		// tabuRows.add(bestRow);
-		// tabuCols.add(bestCol);
-		// }
+		ArrayList<Integer> tabuCols = new ArrayList<Integer>();
 
-		int bestIndex;
-		for (int i = 0; i < numRows; i++) {
-			bestIndex = 0;
-			while (tabuRows.contains(bestIndex)) {
-				bestIndex++;
-			}
-			for (int j = 0; j < numCols; j++) {
-				if (!tabuRows.contains(j)) {
-					if (S.getElement(i, j) > S.getElement(i, bestIndex)) {
-						bestIndex = j;
+		for (int n = 0; n < matches.length; n++) {
+			int bestRow = 0;
+			int bestCol = 0;
+			int bestScore = -2000;
+			int nextScore;
+			for (int i = 0; i < numRows; i++) {
+				if (tabuRows.contains(i)) {
+					continue;
+				}
+				for (int j = 0; j < numCols; j++) {
+					if (tabuCols.contains(j)) {
+						continue;
+					}
+					nextScore = S.getElement(i, j);
+					if (nextScore > bestScore) {
+						bestRow = i;
+						bestCol = j;
+						bestScore = nextScore;
 					}
 				}
 			}
-			matches[i] = bestIndex;
-			tabuRows.add(bestIndex);
+			matches[bestRow] = bestCol;
+			tabuRows.add(bestRow);
+			tabuCols.add(bestCol);
 		}
+
+//		int bestIndex;
+//		for (int i = 0; i < numRows; i++) {
+//			bestIndex = 0;
+//			while (tabuRows.contains(bestIndex)) {
+//				bestIndex++;
+//			}
+//			for (int j = 0; j < numCols; j++) {
+//				if (!tabuRows.contains(j)) {
+//					if (S.getElement(i, j) > S.getElement(i, bestIndex)) {
+//						bestIndex = j;
+//					}
+//				}
+//			}
+//			matches[i] = bestIndex;
+//			tabuRows.add(bestIndex);
+//		}
 
 		return matches;
 	}
