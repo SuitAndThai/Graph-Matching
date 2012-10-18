@@ -93,7 +93,7 @@ public class Main {
 		Tree v3 = new Tree("e0");
 		Tree v4 = new Tree("b0");
 		Tree v5 = new Tree("b1");
-		Tree v6 = new Tree("d0");
+		Tree v6 = new Tree("c0");
 
 		v1.addChild(v2);
 		v1.addChild(v5);
@@ -106,20 +106,20 @@ public class Main {
 	}
 
 	public static Tree makeT2() {
-		Tree w5 = new Tree("a0");
-		Tree w1 = new Tree("a1");
-		Tree w3 = new Tree("c1");
-		Tree w6 = new Tree("d0");
-		Tree w7 = new Tree("e0");
-		Tree w9 = new Tree("b0");
+		Tree v1 = new Tree("a0");
+		Tree v2 = new Tree("a1");
+		Tree v3 = new Tree("e0");
+		Tree v4 = new Tree("b0");
+		Tree v5 = new Tree("b1");
+		Tree v6 = new Tree("d0");
 
-		w5.addChild(w1);
-		w5.addChild(w3);
-		w5.addChild(w6);
+		v1.addChild(v2);
+		v1.addChild(v5);
+		v1.addChild(v6);
 
-		w1.addChild(w7);
-		w1.addChild(w9);
+		v2.addChild(v3);
+		v2.addChild(v4);
 
-		return w5;
+		return v1;
 	}
 }
