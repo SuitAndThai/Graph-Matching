@@ -1,0 +1,34 @@
+To discuss:
+- Pattern Definition Language
+	For defining software patterns
+- Program Analysis Framework
+	For the collection of artifacts from a code base and building a corresponding PDL model
+- Pattern Matching / Recommendation Engine
+	For evaluation of the differences between a developers models from the PDL model
+- User Interface
+	For presentation of recommended changes to the developer
+
+SOOT???
+
+Presentation:
+	- Problem: help novice programmers implement common, simple algorithms correctly
+		1.	dynamic (not yet compiled / compilable)
+		2.	static (compiled)
+	- Solution
+		1.	Tree/graph-matching problem to match up user's code with a known correct implementation
+		2.	Suggest edits to guide them to a correct implementation
+		3.	Implement as an Eclipse plugin
+	- What we've done
+		1.	Algorithms
+			- exact graph matching (with/without adjacency matrices)
+			- string matching
+			- branch and bound implementations
+			- similarity matrix (implemented and benchmarked)
+			- pq-Gram (implemented and benchmarked)
+		2.	*_*
+		3.	Eclipse
+			- Produce AST using JDT
+			- Develop generic Eclipse plugins
+	- Where we're going
+		??? WE HAVE NO IDEA ???
+		- generalizing/abstracting the pattern recognition engine

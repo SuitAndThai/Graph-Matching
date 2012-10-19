@@ -28,9 +28,9 @@ public class PQGramCommonTree {
 		return null;
 	}
 
-	private static void buildTrees(ArrayList<String[]> difference,
+	private static void buildTrees(ArrayList<String[]> commons,
 			Set<Tree> trees, Map<String, Tree> built, Set<List<String>> hookedUp) {
-		for (String[] tup : difference) {
+		for (String[] tup : commons) {
 			Tree prev = null;
 			for (int i = 0; i < 5; i++) {
 				if (tup[i].equals(PQGramIndexMaker.STAR_LABEL)) continue;
