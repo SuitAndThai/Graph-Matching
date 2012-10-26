@@ -14,7 +14,6 @@ public class Main {
 		System.out.println(dist(g, g2, p, q));
 	}
 
-	@SuppressWarnings("unused")
 	public static void printI(ArrayList<String[]> I) {
 		for (String[] tup : I) {
 			for (int i = 0; i < tup.length; i++) {
@@ -40,8 +39,9 @@ public class Main {
 		}
 		return jStr;
 	}
-	
-	public static ArrayList<String[]> multiDifference(ArrayList<String[]> I1, ArrayList<String[]> I2) {
+
+	public static ArrayList<String[]> multiDifference(ArrayList<String[]> I1,
+			ArrayList<String[]> I2) {
 		ArrayList<String> I2strings = new ArrayList<String>(I1.size());
 		for (String[] tup : I2) {
 			I2strings.add(join(tup, ","));
@@ -57,9 +57,9 @@ public class Main {
 		}
 		return difference;
 	}
-	
-	public static ArrayList<String[]> multiIntersection(
-			ArrayList<String[]> I1, ArrayList<String[]> I2) {
+
+	public static ArrayList<String[]> multiIntersection(ArrayList<String[]> I1,
+			ArrayList<String[]> I2) {
 		if (I2.size() < I1.size()) {
 			return multiIntersection(I2, I1);
 		}
@@ -87,7 +87,7 @@ public class Main {
 		return mUnion;
 	}
 
-	public static Tree makeT1() {
+	public static Tree makeT2() {
 		Tree v1 = new Tree("a0");
 		Tree v2 = new Tree("a1");
 		Tree v3 = new Tree("e0");
@@ -105,7 +105,25 @@ public class Main {
 		return v1;
 	}
 
-	public static Tree makeT2() {
+	public static Tree makeT1() {
+		Tree v1 = new Tree("a0");
+		Tree v2 = new Tree("a1");
+		Tree v3 = new Tree("e0");
+		Tree v4 = new Tree("b0");
+		Tree v5 = new Tree("b1");
+		Tree v6 = new Tree("c0");
+		
+
+		v1.addChild(v3);
+		v1.addChild(v4);
+		v1.addChild(v5);
+		v1.addChild(v6);
+
+
+		return v1;
+	}
+
+	public static Tree makeT3() {
 		Tree v1 = new Tree("a0");
 		Tree v2 = new Tree("a1");
 		Tree v3 = new Tree("e0");

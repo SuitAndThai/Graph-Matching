@@ -1,8 +1,6 @@
 package graph;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -10,22 +8,27 @@ import matrix.Matrix;
 
 public class Tree {
 	private String label;
-	private ArrayList<Tree> children;
+	private List<Tree> children;
 
 	public Tree(String label) {
 		this.label = label;
 		this.children = new ArrayList<Tree>();
 	}
 
-	public void addChild(Tree tree) {
+	public int addChild(Tree tree) {
 		this.children.add(tree);
+		return this.children.size() - 1;
+	}
+	
+	public void deleteChild(int position) {
+		this.children.remove(position);
 	}
 
 	public String getLabel() {
 		return this.label;
 	}
 
-	public ArrayList<Tree> getChildren() {
+	public List<Tree> getChildren() {
 		return this.children;
 	}
 

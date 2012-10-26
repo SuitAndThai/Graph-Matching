@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PQGramIndexMaker {
-	public static String STAR_LABEL = "*";
-	
+	public static String STAR_LABEL = "**";
+
 	public static ArrayList<String[]> pqGramIndex(Tree t, int p, int q) {
 		ArrayList<String[]> I = new ArrayList<String[]>();
 		String[] stem = new String[p];

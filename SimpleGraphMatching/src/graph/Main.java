@@ -2,9 +2,7 @@ package graph;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
-import java.util.ArrayList;
 import java.util.Random;
-
 import matrix.Matcher;
 import matrix.Matrix;
 
