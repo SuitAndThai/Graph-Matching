@@ -1,23 +1,22 @@
 package pqgram;
 
-import graph.Tree;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+
+import tree.Tree;
 
 public class PQGramIndexMaker {
 	public static String STAR_LABEL = "**";
 
-	public static ArrayList<String[]> pqGramIndex(Tree t, int p, int q) {
-		ArrayList<String[]> I = new ArrayList<String[]>();
+	public static Index pqGramIndex(Tree t, int p, int q) {
+		Index I = new Index();
 		String[] stem = new String[p];
 		Arrays.fill(stem, STAR_LABEL);
 		I = index(t, p, q, I, t, stem);
 		return I;
 	}
 
-	private static ArrayList<String[]> index(Tree g, int p, int q,
-			ArrayList<String[]> I, Tree a, String[] stem) {
+	private static Index index(Tree g, int p, int q, Index I, Tree a, String[] stem) {
 		String[] base = new String[q];
 		Arrays.fill(base, STAR_LABEL);
 		stem = shift(stem, a.getLabel());

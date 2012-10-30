@@ -3,8 +3,11 @@ package graph;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.Random;
-import matrix.Matcher;
-import matrix.Matrix;
+
+import matrix.AdjacencyMatrix;
+import simmatrix.Matcher;
+import tree.RandomTree;
+import tree.Tree;
 
 public class Main {
 
@@ -33,8 +36,8 @@ public class Main {
 		long totalPQTime = 0;
 
 		for (int i = 0; i < timesToRun; i++) {
-			t1 = Tree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
-			t2 = Tree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
+			t1 = RandomTree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
+			t2 = RandomTree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
 
 			long startTime, endTime;
 
@@ -52,14 +55,14 @@ public class Main {
 	private static long getSimAverage(int numNodes, int timesToRun) {
 		Tree t1;
 		Tree t2;
-		Matrix m1;
-		Matrix m2;
+		AdjacencyMatrix m1;
+		AdjacencyMatrix m2;
 		long[] totalSim = new long[timesToRun];
 		long totalSimTime = 0;
 
 		for (int i = 0; i < timesToRun; i++) {
-			t1 = Tree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
-			t2 = Tree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
+			t1 = RandomTree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
+			t2 = RandomTree.makeRandomTree(numNodes, makeLabels(numNodes / 2));
 
 			m1 = Tree.getMatrix(t1);
 			m2 = Tree.getMatrix(t2);

@@ -1,34 +1,30 @@
 package matrix;
 
+import simmatrix.Matcher;
+
 public class Main {
 	public static void main(String[] args) {
 		int n = 50;
-		Matrix m = Matrix.generateRandomSquare(n);
+		AdjacencyMatrix m = RandomMatrix.generateRandomAdjacencyMatrix(n);
 		// Matrix m = makeT1();
 		
-		String s = m.toMapleCode(1);
+		String s = Maple.toMapleCode(m, 1);
 		System.out.println(s);
 		System.exit(0);
 
 		System.out.println("Starting Matrix:");
-		m.print();
-		Matrix m2 = m.delete(n - 1);
-		Matrix m3 = m2.delete(n - 2);
-		// Matrix m3 = makeT2();
+		System.out.println(m);
+		AdjacencyMatrix m2 = m.delete(n - 1);
+		AdjacencyMatrix m3 = m2.delete(n - 2);
 
 		System.out.println("A submatrix:");
-		m3.print();
+		System.out.println(m3);
 
-		Matrix S = Matcher.getSimilarityMatrix(m, m3);
+		SquareMatrix S = Matcher.getSimilarityMatrix(m, m3);
 		System.out.println("Similarity matrix");
-		S.print();
+		System.out.println(S);
 
-		// System.out.println("Rowsums");
-		// for (int i = 0; i < S.getNumberOfRows(); i++) {
-		// System.out.println(Matcher.vectorSum(S.getRow(i)));
-		// }
-
-		int[] matches = Matcher.matchNodes(S);
+		int[] matches = Matcher.match(m, m3);
 		int score = 0;
 		for (int i = 0; i < matches.length; i++) {
 			score += S.getElement(i, matches[i]);
@@ -41,10 +37,10 @@ public class Main {
 		System.out.println();
 	}
 
-	public static Matrix makeT1() {
+	public static SquareMatrix makeT1() {
 
 		String[] labels = { "a1", "a2", "e", "b1", "b2", "c" };
-		Matrix m = new Matrix(6, labels);
+		AdjacencyMatrix m = new AdjacencyMatrix(6, labels);
 
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 6; j++) {
@@ -61,9 +57,9 @@ public class Main {
 		return m;
 	}
 
-	public static Matrix makeT2() {
+	public static SquareMatrix makeT2() {
 		String[] labels = { "a1", "a2", "e", "b1", "b2", "d" };
-		Matrix m = new Matrix(6, labels);
+		AdjacencyMatrix m = new AdjacencyMatrix(6, labels);
 
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 6; j++) {

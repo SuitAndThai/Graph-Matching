@@ -1,145 +1,65 @@
 package matrix;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-
 public class Matrix {
+	protected int numRows;
+	protected int numColumns;
+	protected int[][] rows;
 
-	private int[][] mat;
-	private int numRows;
-	private int numColumns;
-	private ArrayList<String> labels;
-
-	// assumes square
-	public Matrix(int size, String[] labelList) {
-		this(size, size, labelList);
-	}
-
-	public Matrix(int numRows, int numColumns, String[] labelList) {
+	public Matrix(int numRows, int numColumns) {
 		this.numRows = numRows;
 		this.numColumns = numColumns;
-		mat = new int[numRows][numColumns];
-		this.labels = new ArrayList<String>(Arrays.asList(labelList));
+		this.rows = new int[numRows][numColumns];
 	}
 
 	public void setElement(int row, int col, int value) {
-		mat[row][col] = value;
+		this.rows[row][col] = value;
 	}
 
 	public int getElement(int row, int col) {
-		return mat[row][col];
-	}
-
-	public String getLabel(int n) {
-		return this.labels.get(n);
-	}
-
-	public String toString() {
-		String s = "";
-
-		s += "numRows = " + numRows + " numCols = " + numColumns + "labels = [";
-
-		for (String label : labels) {
-			s += label + ",";
-		}
-		s += "]\n";
-
-		for (int row = 0; row < numRows; row++) {
-			for (int col = 0; col < numColumns; col++) {
-				s += mat[row][col] + " ";
-			}
-			s += "\n";
-		}
-
-		return s;
+		return this.rows[row][col];
 	}
 
 	public int[] getRow(int i) {
-		return mat[i];
+		return this.rows[i];
 	}
 
-	public int[] getCol(int i) {
-		int[] col = new int[numRows];
-		for (int j = 0; j < numRows; j++) {
-			col[j] = mat[j][i];
+	public int[] getColumn(int i) {
+		int[] col = new int[this.numRows];
+		for (int j = 0; j < this.numRows; j++) {
+			col[j] = this.rows[j][i];
 		}
 
 		return col;
 	}
 
-	public void print() {
-		System.out.println(toString());
-	}
-
 	public int getNumberOfRows() {
-		return numRows;
+		return this.numRows;
 	}
 
 	public int getNumberOfColumns() {
-		return numColumns;
-	}
-
-	public static Matrix generateRandomSquare(int size) {
-		Random rand = new Random();
-
-		String[] randomLabels = new String[size];
-
-		for (int i = 0; i < size; i++) {
-			randomLabels[i] = Integer.toString(rand.nextInt(size / 2));
-		}
-
-		Matrix m = new Matrix(size, randomLabels);
-
-		for (int row = 0; row < size; row++) {
-			for (int col = 0; col < size; col++) {
-				m.setElement(row, col, rand.nextInt(2));
-			}
-		}
-
-		return m;
-	}
-
-	public Matrix clone() {
-		int r = getNumberOfRows();
-		int c = getNumberOfColumns();
-
-		Matrix m = new Matrix(r, c, (String[]) labels.toArray());
-
-		for (int row = 0; row < r; row++) {
-			for (int col = 0; col < c; col++) {
-				m.setElement(row, col, getElement(row, col));
-			}
-		}
-
-		return m;
+		return this.numColumns;
 	}
 
 	public Matrix delete(int i) {
 		Matrix colDeleted = deleteColumn(i);
 		Matrix rowDeleted = colDeleted.deleteRow(i);
-		rowDeleted.removeLabel(i);
 
 		return rowDeleted;
 	}
 
-	private void removeLabel(int i) {
-		labels.remove(i);
-	}
-
 	public Matrix deleteColumn(int i) {
-		Matrix m = new Matrix(numRows, numColumns - 1, getList(labels));
+		Matrix m = new Matrix(this.numRows, this.numColumns - 1);
 
 		for (int col = 0; col < i; col++) {
-			for (int row = 0; row < numRows; row++) {
+			for (int row = 0; row < this.numRows; row++) {
 				m.setElement(row, col, getElement(row, col));
 			}
 		}
 
 		// skips the column that we've deleted
 
-		for (int col = i; col < numColumns - 1; col++) {
-			for (int row = 0; row < numRows; row++) {
+		for (int col = i; col < this.numColumns - 1; col++) {
+			for (int row = 0; row < this.numRows; row++) {
 				m.setElement(row, col, getElement(row, col + 1));
 			}
 		}
@@ -148,18 +68,18 @@ public class Matrix {
 	}
 
 	public Matrix deleteRow(int i) {
-		Matrix m = new Matrix(numRows - 1, numColumns, getList(labels));
+		Matrix m = new Matrix(this.numRows - 1, this.numColumns);
 
 		for (int row = 0; row < i; row++) {
-			for (int col = 0; col < numColumns; col++) {
+			for (int col = 0; col < this.numColumns; col++) {
 				m.setElement(row, col, getElement(row, col));
 			}
 		}
 
 		// skips the row that we've deleted
 
-		for (int row = i; row < numRows - 1; row++) {
-			for (int col = 0; col < numColumns; col++) {
+		for (int row = i; row < this.numRows - 1; row++) {
+			for (int col = 0; col < this.numColumns; col++) {
 				m.setElement(row, col, getElement(row + 1, col));
 			}
 		}
@@ -167,45 +87,4 @@ public class Matrix {
 		return m;
 	}
 
-	public static String[] getList(ArrayList<String> arr) {
-		String[] temp = new String[arr.size()];
-
-		for (int i = 0; i < arr.size(); i++) {
-			temp[i] = arr.get(i);
-		}
-
-		return temp;
-	}
-
-	// this code is intended for triangular matrices to write the code to create
-	// trees for maple
-	public String toMapleCode(int n) {
-		String output = "";
-		
-		if (1 == n) {
-			output += "restart; with(GraphTheory):\n";
-		}
-		output += "G" + n + ":=Graph(<";
-
-		for (int col = 0; col < numColumns; col++) {
-			output += "<";
-			for (int row = 0; row < numRows; row++) {
-				output += ("" + (mat[row][col] | mat[col][row]));
-
-				if (row < numRows - 1) {
-					output += ",";
-				}
-			}
-			output += ">";
-
-			if (col < numColumns - 1) {
-				output += "|";
-			}
-		}
-
-		output += ">):\n";
-		output += "DrawGraph(G" + n + ");\n";
-
-		return output;
-	}
 }
