@@ -21,7 +21,7 @@ public class PQGramCommonTree {
 	}
 
 	public static Set<Tree> commonTree(ArrayList<String[]> I1,
-			ArrayList<String[]> I2) {
+			ArrayList<String[]> I2, Tree sourceTree, Tree targetTree) {
 		ArrayList<String[]> common = Main.multiIntersection(I1, I2);
 		ArrayList<String[]> missing = Main.multiDifference(I2, common);
 		ArrayList<String[]> extra = Main.multiDifference(I1, common);
@@ -42,7 +42,7 @@ public class PQGramCommonTree {
 		System.out.println("\nInsertions");
 		printList(insertions);
 
-		List<Edit> totalEdits = getRelabelings(insertions, deletions);
+		List<Edit> totalEdits = getRelabelings(insertions, deletions, sourceTree, targetTree);
 
 		System.out.println("\nTotal Edits:");
 		printList(totalEdits);
@@ -52,34 +52,37 @@ public class PQGramCommonTree {
 
 	private static List<Edit> getRelabelings(
 			List<Triple<String, String, Integer>> insertions,
-			List<Triple<String, String, Integer>> deletions) {
-		List<Edit> insertionList = new ArrayList<Edit>();
+			List<Triple<String, String, Integer>> deletions, Tree sourceTree, Tree targetTree) {
+		List<Insertion> insertionList = new ArrayList<Insertion>();
 		Map<String, String> relabelings = new HashMap<String, String>();
+
 		for (Triple<String, String, Integer> insertion : insertions) {
 			boolean didRelabel = false;
-			String insertionParent = insertion.getA();
-			String insertionChild = insertion.getB();
+			String insertTo = insertion.getA();
+			String inserted = insertion.getB();
 			for (Triple<String, String, Integer> deletion : deletions) {
-				String parent = deletion.getA();
-				String child = deletion.getB();
-				int position = deletion.getC();
-				if (relabelings.containsKey(parent)) {
-					parent = relabelings.get(parent);
+				String deletedFrom = deletion.getA();
+				String deleted = deletion.getB();
+				int deletedPosition = deletion.getC();
+				if (relabelings.containsKey(deletedFrom)) {
+					deletedFrom = relabelings.get(deletedFrom);
 				}
-				if (relabelings.containsKey(child)) {
-					child = relabelings.get(child);
+				if (relabelings.containsKey(deleted)) {
+					deleted = relabelings.get(deleted);
 				}
-				if (insertion.getA().equals(parent)
-						&& insertion.getC().equals(position)) {
-					// TODO: before we relabel a node, check if the new label is
-					// in this node's descendants
-					relabelings.put(child, insertion.getB());
+//				deletion.setA(deletedFrom);
+//				deletion.setB(deleted);
+				if (insertion.getA().equals(deletedFrom)
+						&& insertion.getC().equals(deletedPosition)
+						&& !sourceTree.find(deleted).isDescendant(sourceTree.find(inserted))
+						&& !targetTree.find(inserted).isDescendant(targetTree.find(deleted))) {
+					relabelings.put(deleted, inserted);
 					didRelabel = true;
 				}
 			}
 			if (!didRelabel)
 				insertionList
-						.add(new Insertion(insertionParent, insertionChild));
+						.add(new Insertion(insertTo, inserted));
 		}
 
 		List<Edit> editList = new ArrayList<Edit>();
@@ -89,16 +92,65 @@ public class PQGramCommonTree {
 			if (!oldName.equals(relabelings.get(oldName)))
 				editList.add(new Relabeling(oldName, relabelings.get(oldName)));
 		}
+		
+		List<Edit> toBeRemoved = new ArrayList<Edit>();
 
+		Map<String, String> deletedToParent = new HashMap<String, String>();
 		// add all unaffected deletions
 		for (Triple<String, String, Integer> deletion : deletions) {
-			if (!relabelings.containsKey(deletion.getB())) {
-				editList.add(new Deletion(deletion.getA(), deletion.getB()));
+			if (relabelings.containsKey(deletion.getA())) {
+				deletion.setA(relabelings.get(deletion.getA()));
+			}
+			if (relabelings.containsKey(deletion.getB())) {
+				deletion.setB(relabelings.get(deletion.getB()));
+			}
+			if (!relabelings.containsKey(deletion.getB())) { // not a relabeling
+				deletedToParent.put(deletion.getB(), deletion.getA()); // add to deleted -> parent mapping
+				if (!deletedToParent.containsKey(deletion.getA())) { // parent has not already been deleted
+					editList.add(new Deletion(deletion.getA(), deletion.getB())); // we want this deletion
+				} else {
+					boolean hasMatchingInsertion = false;
+					for (Insertion insert : insertionList) { // check for a matching insertion
+						if (insert.a.equals(deletedToParent.get(deletion.getA())) && insert.b.equals(deletion.getB())) { // if the deletion and insertion are inverses, we don't need them
+							toBeRemoved.add(insert);
+							hasMatchingInsertion = true;
+						}
+					}
+					if (!hasMatchingInsertion) {
+						deletedToParent.put(deletion.getB(), deletedToParent.get(deletion.getA()));
+						editList.add(new Deletion(deletion.getA(), deletion.getB())); // we want this deletion
+					}
+				}
+			}
+		}
+		
+		insertionList.removeAll(toBeRemoved);
+		
+		Map<String, String> parentToInserted = new HashMap<String, String>();
+		// remove all of the deletions and insertions that weren't caught above
+		for (Insertion insertion : insertionList) {
+			if (!relabelings.containsKey(insertion.b)) { // not a relabeling
+				parentToInserted.put(insertion.b, insertion.a); // add to parent -> inserted mapping
+				if (parentToInserted.containsKey(insertion.a)) {
+					boolean hasMatchingDeletion = false;
+					for (Edit delete : editList) { // check for a matching insertion
+						if (delete instanceof Deletion) {
+							if (delete.a.equals(parentToInserted.get(insertion.a)) && delete.b.equals(insertion.b)) {
+								toBeRemoved.add(delete);
+								toBeRemoved.add(insertion);
+							}
+						}
+					}
+					if (!hasMatchingDeletion) {
+						parentToInserted.put(insertion.b, parentToInserted.get(insertion.a));
+					}
+				}
 			}
 		}
 
 		// add all unaffected insertions
 		editList.addAll(insertionList);
+		editList.removeAll(toBeRemoved);
 
 		return editList;
 	}
@@ -244,9 +296,11 @@ public class PQGramCommonTree {
 	public static void main(String[] args) {
 		int p = 2;
 		int q = 3;
-		ArrayList<String[]> I1 = PQGramIndexMaker.pqGramIndex(Main.makeT1(), p,
-				q);
-		ArrayList<String[]> I2 = PQGramIndexMaker.pqGramIndex(Main.makeT2(), p,
+		Tree sourceTree = Main.makeT1();
+		Tree targetTree = Main.makeT2();
+
+		ArrayList<String[]> I1 = PQGramIndexMaker.pqGramIndex(sourceTree, p, q);
+		ArrayList<String[]> I2 = PQGramIndexMaker.pqGramIndex(targetTree, p,
 				q);
 
 		System.out.println("I1 Tree");
@@ -255,7 +309,7 @@ public class PQGramCommonTree {
 		System.out.println("I2 Tree");
 		Main.printI(I2);
 
-		Set<Tree> common = commonTree(I1, I2);
+		Set<Tree> common = commonTree(I1, I2, sourceTree, targetTree);
 		System.out.println("\nCommon Sub-trees");
 		System.out.println(common);
 	}

@@ -19,9 +19,37 @@ public class Tree {
 		this.children.add(tree);
 		return this.children.size() - 1;
 	}
-	
+
 	public void deleteChild(int position) {
 		this.children.remove(position);
+	}
+
+	public boolean isDescendant(Tree tree) {
+		if (children.contains(tree)) {
+			return true;
+		}
+
+		for (Tree t : children) {
+			if (t.isDescendant(tree)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public Tree find(String label) {
+		if (this.label.equals(label)) {
+			return this;
+		} else {
+			for (Tree t : this.children) {
+				Tree goal = t.find(label);
+				if (null != goal) {
+					return goal;
+				}
+			}
+		}
+		return null;
 	}
 
 	public String getLabel() {
@@ -94,7 +122,7 @@ public class Tree {
 		}
 		return m;
 	}
-	
+
 	public static int[] getRandomPartition(int n, int numPartitions) {
 		int[] partitions = new int[numPartitions];
 		for (int i = 0; i < partitions.length; i++) {
@@ -102,7 +130,8 @@ public class Tree {
 		}
 		Random rand = new Random();
 		for (int j = 0; j < n; j++) {
-			partitions[(rand.nextInt(partitions.length) + rand.nextInt(partitions.length)) % numPartitions]++;
+			partitions[(rand.nextInt(partitions.length) + rand
+					.nextInt(partitions.length)) % numPartitions]++;
 		}
 		return partitions;
 	}
@@ -110,7 +139,7 @@ public class Tree {
 	public static Tree makeRandomTree(int numNodes, String[] labels) {
 		int minNumChildren = 1;
 		int maxNumChildren = 30;
-		
+
 		Random rand = new Random();
 		Tree t = new Tree(labels[rand.nextInt(labels.length)]);
 
@@ -121,7 +150,9 @@ public class Tree {
 			if (numNodes <= minNumChildren) {
 				numChildren = numNodes;
 			} else {
-				numChildren = Math.min(numNodes, minNumChildren) + rand.nextInt(Math.min(numNodes, maxNumChildren) - Math.min(numNodes, minNumChildren));
+				numChildren = Math.min(numNodes, minNumChildren)
+						+ rand.nextInt(Math.min(numNodes, maxNumChildren)
+								- Math.min(numNodes, minNumChildren));
 			}
 			numNodes -= numChildren;
 			int[] numDescendants = getRandomPartition(numNodes, numChildren);
