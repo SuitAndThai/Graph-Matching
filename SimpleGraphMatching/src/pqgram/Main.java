@@ -25,13 +25,9 @@ public class Main {
 
 	public static double dist(Tree T1, Tree T2, int p, int q) {
 		Index index = PQGramIndexMaker.pqGramIndex(T1, p, q);
-		printI(index);
 		Index index2 = PQGramIndexMaker.pqGramIndex(T2, p, q);
-		printI(index2);
 		Index mUnion = index.union(index2);
-		printI(mUnion);
 		Index mIntersection = index.intersect(index2);
-		printI(mIntersection);
 		return 1 - (2.0 * mIntersection.size()) / mUnion.size();
 	}
 

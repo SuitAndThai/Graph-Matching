@@ -7,7 +7,6 @@ public class Index extends Multiset<Tuple<String>> {
 		for (int i = 0; i < tuple.length; i++) {
 			t.set(i, tuple[i]);
 		}
-		System.out.println("Adding: " + t);
 		this.add(t);
 	}
 	
