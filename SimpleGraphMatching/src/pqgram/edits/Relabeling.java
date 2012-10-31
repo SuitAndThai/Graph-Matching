@@ -1,4 +1,4 @@
-package pqgram;
+package pqgram.edits;
 
 public class Relabeling extends Edit {
 	

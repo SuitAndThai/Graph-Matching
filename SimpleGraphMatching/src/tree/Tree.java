@@ -52,6 +52,34 @@ public class Tree {
 	public boolean isParent() {
 		return !this.isLeaf();
 	}
+	
+	public boolean isDescendant(Tree tree) {
+		if (children.contains(tree)) {
+			return true;
+		}
+
+		for (Tree t : children) {
+			if (t.isDescendant(tree)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public Tree find(String label) {
+		if (this.label.equals(label)) {
+			return this;
+		} else {
+			for (Tree t : this.children) {
+				Tree goal = t.find(label);
+				if (null != goal) {
+					return goal;
+				}
+			}
+		}
+		return null;
+	}
 
 	public int getNumberOfNodes() {
 		int numNodes = 1;

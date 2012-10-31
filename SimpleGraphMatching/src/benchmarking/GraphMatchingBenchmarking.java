@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import pqgram.PQGram;
 import simmatrix.Matcher;
 import tree.RandomTree;
 import tree.Tree;
@@ -45,7 +46,7 @@ public class GraphMatchingBenchmarking {
 		int P = 2;
 		int Q = 3;
 		long startTime = getCpuTime();
-		pqgram.Main.dist(t1, t2, P, Q);
+		PQGram.dist(t1, t2, P, Q);
 		return getCpuTime() - startTime;
 	}
 	
@@ -55,7 +56,7 @@ public class GraphMatchingBenchmarking {
 		return getCpuTime() - startTime;
 	}
 
-	public long[] getTimes(int n) throws InterruptedException {
+	private long[] getTimes(int n) throws InterruptedException {
 		long[] times = new long[NUM_ALGORITHMS];
 
 		Tree t1 = RandomTree.makeRandomTree(n, makeLabels(n / 2));

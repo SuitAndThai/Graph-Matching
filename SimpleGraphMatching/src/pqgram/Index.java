@@ -40,5 +40,18 @@ public class Index extends Multiset<Tuple<String>> {
 		
 		return i;
 	}
+	
+	@Override
+	public String toString() {
+		String str = "";
+		for (Tuple<String> tup : this.getAllElements()) {
+			for (int i = 0; i < tup.size(); i++) {
+				str += tup.get(i) + " ";
+			}
+			str += "\n";
+		}
+		str += "\n";
+		return str;
+	}
 
 }

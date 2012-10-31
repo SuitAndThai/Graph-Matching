@@ -5,6 +5,7 @@ import java.lang.management.ThreadMXBean;
 import java.util.Random;
 
 import matrix.AdjacencyMatrix;
+import pqgram.PQGram;
 import simmatrix.Matcher;
 import tree.RandomTree;
 import tree.Tree;
@@ -43,7 +44,7 @@ public class Main {
 
 			// pq-Gram
 			startTime = getCpuTime();
-			pqgram.Main.dist(t1, t2, P, Q);
+			PQGram.dist(t1, t2, P, Q);
 			endTime = getCpuTime();
 			totalPQ[i] = endTime - startTime;
 			totalPQTime += totalPQ[i];
