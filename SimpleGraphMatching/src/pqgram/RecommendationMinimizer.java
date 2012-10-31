@@ -26,19 +26,25 @@ public class RecommendationMinimizer {
 			}
 			if (!relabelings.containsKey(deletion.getB())) { // not a relabeling
 				deletedToParent.put(deletion.getB(), deletion.getA()); // add to deleted -> parent mapping
-				if (deletedToParent.containsKey(deletion.getA())) { // parent has already been deleted
-					boolean hasMatchingInsertion = false;
-					for (Insertion insertion : insertions) { // check for a matching insertion
-						if (insertion.getA().equals(deletedToParent.get(deletion.getA())) && insertion.getB().equals(deletion.getB())) { // if the deletion and insertion are inverses, we don't need them
-							insertionsToRemove.add(insertion);
-							hasMatchingInsertion = true;
-						}
+				String newParentLabel = deletion.getA();
+				if (deletedToParent.containsKey(newParentLabel)) { // parent has already been deleted
+					while (deletedToParent.containsKey(newParentLabel)) {
+						newParentLabel = deletedToParent.get(newParentLabel);
 					}
-					if (!hasMatchingInsertion) {
-						deletedToParent.put(deletion.getB(), deletedToParent.get(deletion.getA()));
-					} else {
-						deletionsToRemove.add(deletion);
+					deletion.setA(newParentLabel);
+				}
+				boolean hasMatchingInsertion = false;
+				for (Insertion insertion : insertions) { // check for a matching insertion
+					if (insertion.getA().equals(newParentLabel) && insertion.getB().equals(deletion.getB())) { // if the deletion and insertion are inverses, we don't need them
+						insertionsToRemove.add(insertion);
+						hasMatchingInsertion = true;
 					}
+				}
+				if (!hasMatchingInsertion) {
+					deletedToParent.put(deletion.getB(), deletion.getA());
+				} else {
+					deletionsToRemove.add(deletion);
+					deletedToParent.remove(deletion.getB());
 				}
 			}
 		}
@@ -95,10 +101,22 @@ public class RecommendationMinimizer {
 				if (relabelings.containsKey(deleted)) {
 					deleted = relabelings.get(deleted);
 				}
-				if (insertedOn.equals(deletedFrom) && (insertedPosition == deletedPosition) && !sourceTree.find(deleted).isDescendant(sourceTree.find(inserted)) && !targetTree.find(inserted).isDescendant(targetTree.find(deleted))) {
-						relabelings.put(deleted, inserted);
-						insertionsToRemove.add(insertion);
-						deletionsToRemove.add(deletion);
+				Tree deletedTreeInSource = sourceTree.find(deleted);
+				Tree insertedTreeInSource = sourceTree.find(inserted);
+				Tree deletedTreeInTarget = targetTree.find(deleted);
+				Tree insertedTreeInTarget = targetTree.find(inserted);
+				boolean labelIsSomewhereElseInSource = false;
+				if (deletedTreeInSource != null) {
+					labelIsSomewhereElseInSource = (deletedTreeInSource.getParent() == null) ? deletedTreeInSource.isDescendant(insertedTreeInSource) : deletedTreeInSource.getParent().isDescendant(insertedTreeInSource);
+				}
+				boolean labelIsSomewhereElseInTarget = false;
+				if (insertedTreeInTarget != null) {
+					labelIsSomewhereElseInTarget = (insertedTreeInTarget.getParent() == null) ? insertedTreeInTarget.isDescendant(deletedTreeInTarget) : insertedTreeInTarget.getParent().isDescendant(deletedTreeInTarget);
+				}
+				if (insertedOn.equals(deletedFrom) && (insertedPosition == deletedPosition) && !labelIsSomewhereElseInSource && !labelIsSomewhereElseInTarget) {
+					relabelings.put(deleted, inserted);
+					insertionsToRemove.add(insertion);
+					deletionsToRemove.add(deletion);
 				}
 			}
 		}

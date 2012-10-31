@@ -27,14 +27,20 @@ public class Tree {
 	public Tree getParent() {
 		return this.parent;
 	}
+	
+	public void setParent(Tree parent) {
+		this.parent = parent;
+	}
 
 	public int addChild(Tree tree) {
 		this.children.add(tree);
+		tree.setParent(this);
 		return this.children.size() - 1;
 	}
 	
 	public void deleteChild(int position) {
-		this.children.remove(position);
+		Tree toRemove = this.children.remove(position);
+		toRemove.setParent(null);
 	}
 
 	public String getLabel() {

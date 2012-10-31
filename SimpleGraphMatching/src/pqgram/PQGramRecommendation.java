@@ -28,12 +28,8 @@ public class PQGramRecommendation {
 		getCommonTrees(common, built, childToParent);
 
 		List<Deletion> deletions = getDeletions(extra, built, childToParent);
-		System.out.println("Deletions");
-		Utilities.printList(deletions);
 
 		List<Insertion> insertions = getInsertions(missing, built, childToParent);
-		System.out.println("\nInsertions");
-		Utilities.printList(insertions);
 
 		Map<String, String> relabelings = RecommendationMinimizer.getRelabelings(insertions, deletions, sourceTree, targetTree);
 		
@@ -54,9 +50,6 @@ public class PQGramRecommendation {
 		
 		edits.addAll(insertions);
 		edits.addAll(deletions);
-
-		System.out.println("\nTotal Edits:");
-		Utilities.printList(edits);
 
 		return edits;
 	}
@@ -100,7 +93,7 @@ public class PQGramRecommendation {
 				String currentLabel = tup.get(i);
 				Tree currentTree = getTree(currentLabel, built);
 				position = addChildToParent(parent, currentTree, childToParent);
-				if (position >= 0) {
+				if (position >= 0 && !currentLabel.equals(PQGram.STAR_LABEL)) {
 					edits.add(new PositionalEdit(parent.getLabel(), currentLabel, position));
 				}
 			}
@@ -147,6 +140,13 @@ public class PQGramRecommendation {
 				commonTrees.add(currentTree);
 				addChildToParent(parent, currentTree, childToParent);
 				commonTrees.remove(currentTree);
+			}
+		}
+		if (commonTrees.size() == 1) {
+			Tree falseRoot = commonTrees.toArray(new Tree[1])[0];
+			if (falseRoot.getLabel().equals(PQGram.STAR_LABEL)) {
+				commonTrees.remove(falseRoot);
+				commonTrees.add(falseRoot.getChildren().get(0));
 			}
 		}
 		return commonTrees;
