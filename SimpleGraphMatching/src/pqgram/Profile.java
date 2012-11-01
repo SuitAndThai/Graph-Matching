@@ -1,6 +1,6 @@
 package pqgram;
 
-public class Index extends Multiset<Tuple<String>> {
+public class Profile extends Multiset<Tuple<String>> {
 	
 	public void add(String[] tuple) {
 		Tuple<String> t = new Tuple<String>(tuple.length);
@@ -10,29 +10,29 @@ public class Index extends Multiset<Tuple<String>> {
 		this.add(t);
 	}
 	
-	public Index union(Index other) {
+	public Profile union(Profile other) {
 		return makeIndex(super.union(other));
 	}
 	
-	public Index intersect(Index other) {
+	public Profile intersect(Profile other) {
 		return makeIndex(super.intersect(other));
 	}
 	
-	public Index difference(Index other) {
+	public Profile difference(Profile other) {
 		return makeIndex(super.difference(other));
 	}
 	
 	@Override
-	public Index clone() {
-		Index i = new Index();
+	public Profile clone() {
+		Profile i = new Profile();
 		for (Tuple<String> tup : this.getAllElements()) {
 			i.add(tup);
 		}
 		return i;
 	}
 	
-	private Index makeIndex(Multiset<Tuple<String>> set) {
-		Index i = new Index();
+	private Profile makeIndex(Multiset<Tuple<String>> set) {
+		Profile i = new Profile();
 		
 		for (Tuple<String> tup : set.getAllElements()) {
 			i.add(tup);

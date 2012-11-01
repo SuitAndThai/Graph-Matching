@@ -17,28 +17,23 @@ import tree.Tree;
 
 public class PQGramRecommendation {
 
-	public static List<Edit> getEdits(Index I1, Index I2, Tree sourceTree, Tree targetTree) {
-		Index common = I1.intersect(I2);
-		Index missing = I2.difference(common);
-		Index extra = I1.difference(common);
+	public static List<Edit> getEdits(Profile profile1, Profile profile2, Tree sourceTree, Tree targetTree) {
+		Profile common = profile1.intersect(profile2);
+		Profile missing = profile2.difference(common);
+		Profile extra = profile1.difference(common);
 
 		Map<String, Tree> built = new HashMap<String, Tree>();
 		Map<String, String> childToParent = new HashMap<String, String>();
 
-		getCommonTrees(common, built, childToParent);
-
+		buildCommonTrees(common, built, childToParent);
 		List<Deletion> deletions = getDeletions(extra, built, childToParent);
-
 		List<Insertion> insertions = getInsertions(missing, built, childToParent);
-
 		Map<String, String> relabelings = RecommendationMinimizer.getRelabelings(insertions, deletions, sourceTree, targetTree);
 		
 		RecommendationMinimizer.minimizeDeletions(insertions, deletions, relabelings);
-
 		RecommendationMinimizer.minimizeInsertions(insertions, deletions, relabelings);
 		
-		// Build up edits
-		
+		// Build up edits		
 		List<Edit> edits = new ArrayList<Edit>();
 		
 		// add all relabelings
@@ -47,14 +42,13 @@ public class PQGramRecommendation {
 				edits.add(new Relabeling(oldName, relabelings.get(oldName)));
 			}
 		}
-		
 		edits.addAll(insertions);
 		edits.addAll(deletions);
 
 		return edits;
 	}
 	
-	private static List<Deletion> getDeletions(Index extra, Map<String, Tree> built, Map<String, String> childToParent) {
+	private static List<Deletion> getDeletions(Profile extra, Map<String, Tree> built, Map<String, String> childToParent) {
 		List<PositionalEdit> posEdits = getPositionalEdits(extra, built, childToParent);
 		
 		List<Deletion> deletions = new ArrayList<Deletion>();
@@ -64,7 +58,7 @@ public class PQGramRecommendation {
 		return deletions;
 	}
 	
-	private static List<Insertion> getInsertions(Index missing, Map<String, Tree> built, Map<String, String> childToParent) {
+	private static List<Insertion> getInsertions(Profile missing, Map<String, Tree> built, Map<String, String> childToParent) {
 		List<PositionalEdit> posEdits = getPositionalEdits(missing, built, childToParent);
 		
 		List<Insertion> insertions = new ArrayList<Insertion>();
@@ -74,7 +68,7 @@ public class PQGramRecommendation {
 		return insertions;
 	}
 
-	private static List<PositionalEdit> getPositionalEdits(Index pieces, Map<String, Tree> built, Map<String, String> childToParent) {
+	private static List<PositionalEdit> getPositionalEdits(Profile pieces, Map<String, Tree> built, Map<String, String> childToParent) {
 		pieces = pieces.clone();
 		built = Utilities.cloneMap(built);
 		childToParent = Utilities.cloneMap(childToParent);
@@ -127,7 +121,7 @@ public class PQGramRecommendation {
 		return -1;
 	}
 
-	private static Set<Tree> getCommonTrees(Index common, Map<String, Tree> built, Map<String, String> childToParent) {
+	private static Set<Tree> buildCommonTrees(Profile common, Map<String, Tree> built, Map<String, String> childToParent) {
 		Set<Tree> commonTrees = new HashSet<Tree>();
 		for (Tuple<String> tup : common.getAllElements()) {
 			Tree ancestor = getTree(tup.get(0), built);

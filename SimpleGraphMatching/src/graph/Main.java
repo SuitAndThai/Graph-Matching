@@ -44,7 +44,7 @@ public class Main {
 
 			// pq-Gram
 			startTime = getCpuTime();
-			PQGram.dist(t1, t2, P, Q);
+			PQGram.getDistance(t1, t2, P, Q);
 			endTime = getCpuTime();
 			totalPQ[i] = endTime - startTime;
 			totalPQTime += totalPQ[i];

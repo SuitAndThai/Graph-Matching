@@ -7,43 +7,46 @@ import tree.Tree;
 public class PQGram {
 	public static String STAR_LABEL = "**";
 
-	public static double dist(Tree T1, Tree T2, int p, int q) {
-		Index index = PQGram.pqGramIndex(T1, p, q);
-		Index index2 = PQGram.pqGramIndex(T2, p, q);
-		Index mUnion = index.union(index2);
-		Index mIntersection = index.intersect(index2);
+	public static double getDistance(Tree T1, Tree T2, int p, int q) {
+		Profile profile = PQGram.getProfile(T1, p, q);
+		Profile profile2 = PQGram.getProfile(T2, p, q);
+		Profile mUnion = profile.union(profile2);
+		Profile mIntersection = profile.intersect(profile2);
 		return 1 - (2.0 * mIntersection.size()) / mUnion.size();
 	}
 
-	public static Index pqGramIndex(Tree t, int p, int q) {
-		Index I = new Index();
+	/*
+	 * Multiset of label-tuples of all pq-grams
+	 */
+	public static Profile getProfile(Tree t, int p, int q) {
+		Profile profile = new Profile();
 		String[] stem = new String[p];
 		Arrays.fill(stem, STAR_LABEL);
-		I = index(t, p, q, I, t, stem);
-		return I;
+		profile = getLabelTuples(t, p, q, profile, t, stem);
+		return profile;
 	}
 
-	private static Index index(Tree g, int p, int q, Index I, Tree a, String[] stem) {
+	private static Profile getLabelTuples(Tree g, int p, int q, Profile profile, Tree a, String[] stem) {
 		String[] base = new String[q];
 		Arrays.fill(base, STAR_LABEL);
 		stem = shift(stem, a.getLabel());
 		if (a.isLeaf()) {
-			I.add(concat(stem, base));
+			profile.add(concatenate(stem, base));
 		} else {
 			for (Tree c : a.getChildren()) {
 				base = shift(base, c.getLabel());
-				I.add(concat(stem, base));
-				I = index(g, p, q, I, c, stem);
+				profile.add(concatenate(stem, base));
+				profile = getLabelTuples(g, p, q, profile, c, stem);
 			}
 			for (int k = 1; k < q; k++) {
 				base = shift(base, STAR_LABEL);
-				I.add(concat(stem, base));
+				profile.add(concatenate(stem, base));
 			}
 		}
-		return I;
+		return profile;
 	}
 
-	private static String[] concat(String[] stem, String[] base) {
+	private static String[] concatenate(String[] stem, String[] base) {
 		String[] result = new String[stem.length + base.length];
 		for (int i = 0; i < stem.length; i++) {
 			result[i] = stem[i];

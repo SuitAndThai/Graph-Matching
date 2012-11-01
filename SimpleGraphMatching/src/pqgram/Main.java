@@ -12,9 +12,9 @@ public class Main {
 		System.out.println(t2);
 		int p = 2;
 		int q = 3;
-		System.out.println("Distance: " + PQGram.dist(t1, t2, p, q));
+		System.out.println("Distance: " + PQGram.getDistance(t1, t2, p, q));
 		System.out.println();
-		PQGramRecommendation.getEdits(PQGram.pqGramIndex(t1, p, q), PQGram.pqGramIndex(t2, p, q), t1, t2);
+		PQGramRecommendation.getEdits(PQGram.getProfile(t1, p, q), PQGram.getProfile(t2, p, q), t1, t2);
 	}
 	
 	public static Tree makeT2() {

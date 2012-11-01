@@ -1,17 +1,22 @@
 package matrix;
 
 public class Maple {
-	/* 
-	 * this code is intended for triangular matrices to write the code to create
+
+	private static int ID = 1;
+
+	/*
+	 * This code is intended for triangular matrices to write the code to create
 	 * trees for maple
 	 */
-	public static String toMapleCode(SquareMatrix m, int n) {
+	public static String toMapleCode(SquareMatrix m) {
 		String output = "";
 
-		if (1 == n) {
+		if (1 == ID) {
 			output += "restart; with(GraphTheory):\n";
 		}
-		output += "G" + n + ":=Graph(<";
+		output += "G" + ID + ":=Graph(<";
+
+		ID++;
 
 		for (int col = 0; col < m.getNumberOfColumns(); col++) {
 			output += "<";
@@ -31,9 +36,8 @@ public class Maple {
 		}
 
 		output += ">):\n";
-		output += "DrawGraph(G" + n + ");\n";
+		output += "DrawGraph(G" + ID + ");\n";
 
 		return output;
 	}
-
 }

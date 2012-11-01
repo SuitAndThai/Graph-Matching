@@ -19,11 +19,15 @@ public class AdjacencyMatrix extends SquareMatrix {
 	public String toString() {
 		String s = "";
 
-		s += "numRows = " + this.numRows + " numCols = " + this.numColumns + "labels = [";
+		s += "Rows = " + this.numRows + " Columns = " + this.numColumns
+				+ " Labels = [";
 
 		for (String label : this.labels) {
 			s += label + ",";
 		}
+
+		s = s.substring(0, s.length() - 1);
+
 		s += "]\n";
 
 		for (int row = 0; row < this.numRows; row++) {
@@ -41,7 +45,8 @@ public class AdjacencyMatrix extends SquareMatrix {
 		int r = getNumberOfRows();
 		int c = getNumberOfColumns();
 
-		AdjacencyMatrix m = new AdjacencyMatrix(r, (String[]) this.labels.toArray());
+		AdjacencyMatrix m = new AdjacencyMatrix(r,
+				(String[]) this.labels.toArray());
 
 		for (int row = 0; row < r; row++) {
 			for (int col = 0; col < c; col++) {
@@ -57,16 +62,18 @@ public class AdjacencyMatrix extends SquareMatrix {
 		Matrix m = super.delete(index);
 		List<String> labels = new ArrayList<String>(this.labels);
 		labels.remove(index);
-		String[] labelArray = labels.toArray(new String[this.labels.size()-1]);
+		String[] labelArray = labels
+				.toArray(new String[this.labels.size() - 1]);
 
-		AdjacencyMatrix am = new AdjacencyMatrix(m.getNumberOfRows(), labelArray);
-		
+		AdjacencyMatrix am = new AdjacencyMatrix(m.getNumberOfRows(),
+				labelArray);
+
 		for (int i = 0; i < m.getNumberOfRows(); i++) {
 			for (int j = 0; j < m.getNumberOfColumns(); j++) {
 				am.setElement(i, j, m.getElement(i, j));
 			}
 		}
-		
+
 		return am;
 	}
 }

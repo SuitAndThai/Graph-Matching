@@ -7,8 +7,8 @@ public class Main {
 		int n = 50;
 		AdjacencyMatrix m = RandomMatrix.generateRandomAdjacencyMatrix(n);
 		// Matrix m = makeT1();
-		
-		String s = Maple.toMapleCode(m, 1);
+
+		String s = Maple.toMapleCode(m);
 		System.out.println(s);
 		System.exit(0);
 
