@@ -120,6 +120,23 @@ public class PQGramRecommendationRelabelTest {
 		TestUtilities.getEditsAndAssertSize(sourceTree, targetTree, 2);
 	}
 	
-	
+	@Test
+	public void testRelabelAllTheNodes() {
+		sourceTree = new Tree("a");
+		Tree child1 = new Tree("b");
+		sourceTree.addChild(child1);
+		sourceTree.addChild(new Tree("c"));
+		child1.addChild(new Tree("d"));
+		child1.addChild(new Tree("e"));
+		
+		targetTree = new Tree("z");
+		Tree child2 = new Tree("y");
+		targetTree.addChild(child2);
+		targetTree.addChild(new Tree("x"));
+		child2.addChild(new Tree("w"));
+		child2.addChild(new Tree("v"));
+		
+		TestUtilities.getEditsAndAssertSize(sourceTree, targetTree, 5);
+	}
 
 }

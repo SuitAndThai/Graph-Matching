@@ -90,5 +90,47 @@ public class PQGramRecommendationMixedTest {
 		
 		TestUtilities.getEditsAndAssertSize(sourceTree, targetTree, 2);
 	}
+	
+	@Test
+	public void testRichardsStupidExample() {
+		sourceTree = new Tree("a");
+		Tree b = new Tree("b");
+		Tree c = new Tree("c");
+		Tree d = new Tree("d");
+		Tree e = new Tree("e");
+		Tree f = new Tree("f");
+		Tree g = new Tree("g");
+		Tree h = new Tree("h");
+		Tree i = new Tree("i");
+		sourceTree.addChild(b);
+		sourceTree.addChild(c);
+		b.addChild(d);
+		d.addChild(e);
+		d.addChild(f);
+		c.addChild(g);
+		g.addChild(h);
+		g.addChild(i);
+		
+
+		targetTree = new Tree("g");
+		Tree b2 = new Tree("b");
+		Tree c2 = new Tree("c");
+		Tree d2 = new Tree("d");
+		Tree e2 = new Tree("e");
+		Tree f2 = new Tree("f");
+		Tree a2 = new Tree("a");
+		Tree h2 = new Tree("h");
+		Tree i2 = new Tree("i");
+		targetTree.addChild(h2);
+		targetTree.addChild(i2);
+		h2.addChild(a2);
+		a2.addChild(b2);
+		a2.addChild(c2);
+		i2.addChild(d2);
+		d2.addChild(e2);
+		d2.addChild(f2);
+		
+		TestUtilities.getEditsAndAssertSize(sourceTree, targetTree, 4);
+	}
 
 }

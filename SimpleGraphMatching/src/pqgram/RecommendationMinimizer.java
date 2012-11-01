@@ -58,10 +58,12 @@ public class RecommendationMinimizer {
 		List<Deletion> deletionsToRemove = new ArrayList<Deletion>();
 		
 		Map<String, String> parentToInserted = new HashMap<String, String>();
+		Map<String, Insertion> finalInsertions = new HashMap<String, Insertion>();
 		// remove all of the deletions and insertions that weren't caught above
 		for (Insertion insertion : insertions) {
 			if (!relabelings.containsKey(insertion.getB())) { // not a relabeling
 				parentToInserted.put(insertion.getB(), insertion.getA()); // add to parent -> inserted mapping
+				finalInsertions.put(insertion.getB(), insertion);
 				if (parentToInserted.containsKey(insertion.getA())) {
 					boolean hasMatchingDeletion = false;
 					for (Deletion deletion : deletions) { // check for a matching deletion
@@ -69,10 +71,20 @@ public class RecommendationMinimizer {
 							deletionsToRemove.add(deletion);
 							insertionsToRemove.add(insertion);
 							hasMatchingDeletion = true;
+							if (finalInsertions.containsKey(insertion.getA())) {
+								Insertion parentInsertion = finalInsertions.get(insertion.getA());
+								parentInsertion.addInheritedChild(insertion.getB());
+								
+								while (finalInsertions.containsKey(parentInsertion.getA())) { // Richard understands this
+									parentInsertion = finalInsertions.get(parentInsertion.getA());
+									parentInsertion.addInheritedChild(insertion.getB());
+								}
+							}
 						}
 					}
 					if (!hasMatchingDeletion) {
 						parentToInserted.put(insertion.getB(), parentToInserted.get(insertion.getA()));
+						finalInsertions.put(insertion.getB(), insertion);
 					}
 				}
 			}

@@ -10,6 +10,32 @@ public class PQGramRecommendationDeletionTest {
 	
 	private Tree sourceTree;
 	private Tree targetTree;
+	
+	@Test
+	public void testDeleteAllOriginalNodesAndInsertOne() {
+		sourceTree = new Tree("a");
+		Tree b = new Tree("b");
+		Tree c = new Tree("c");
+		Tree d = new Tree("d");
+		Tree e = new Tree("e");
+		Tree f = new Tree("f");
+		Tree g = new Tree("g");
+		Tree h = new Tree("h");
+		Tree i = new Tree("i");
+		sourceTree.addChild(b);
+		sourceTree.addChild(c);
+		b.addChild(d);
+		d.addChild(e);
+		d.addChild(f);
+		c.addChild(g);
+		g.addChild(h);
+		g.addChild(i);
+		
+
+		targetTree = new Tree("z");
+		
+		TestUtilities.getEditsAndAssertSize(sourceTree, targetTree, 9);
+	}
 
 	@Test
 	public void testDeleteLeaf() {
