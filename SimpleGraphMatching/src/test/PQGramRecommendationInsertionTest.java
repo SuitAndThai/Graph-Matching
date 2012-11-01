@@ -131,9 +131,7 @@ public class PQGramRecommendationInsertionTest {
 		
 		TestUtilities.getEditsAndAssertSize(sourceTree, targetTree, 2);
 	}
-	
-
-	
+		
 	@Test
 	public void testDeleteOriginalAndInsertAllNewNodes() {
 		targetTree = new Tree("a");

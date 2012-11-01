@@ -132,5 +132,28 @@ public class PQGramRecommendationMixedTest {
 		
 		TestUtilities.getEditsAndAssertSize(sourceTree, targetTree, 4);
 	}
+	
+	@Test
+	public void testEverythingIsTheSame() {
+		targetTree = new Tree("a");
+		Tree b = new Tree("b");
+		Tree c = new Tree("c");
+		Tree d = new Tree("d");
+		Tree e = new Tree("e");
+		Tree f = new Tree("f");
+		Tree g = new Tree("g");
+		Tree h = new Tree("h");
+		Tree i = new Tree("i");
+		targetTree.addChild(b);
+		targetTree.addChild(c);
+		b.addChild(d);
+		d.addChild(e);
+		d.addChild(f);
+		c.addChild(g);
+		g.addChild(h);
+		g.addChild(i);
+		
+		TestUtilities.getEditsAndAssertSize(targetTree, targetTree, 0);
+	}
 
 }
