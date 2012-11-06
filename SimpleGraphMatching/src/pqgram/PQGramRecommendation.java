@@ -26,10 +26,12 @@ public class PQGramRecommendation {
 		Map<String, String> childToParent = new HashMap<String, String>();
 
 		buildCommonTrees(common, built, childToParent);
+		
 		List<Deletion> deletions = getDeletions(extra, built, childToParent);
 		List<Insertion> insertions = getInsertions(missing, built, childToParent);
-		Map<String, String> relabelings = RecommendationMinimizer.getRelabelings(insertions, deletions, sourceTree, targetTree);
 		
+		// minimizing deletions/insertions by finding eligible relabelings and matching up pairs due to relabeling propagations
+		Map<String, String> relabelings = RecommendationMinimizer.getRelabelings(insertions, deletions, sourceTree, targetTree);
 		RecommendationMinimizer.minimizeDeletions(insertions, deletions, relabelings);
 		RecommendationMinimizer.minimizeInsertions(insertions, deletions, relabelings);
 		
@@ -42,8 +44,8 @@ public class PQGramRecommendation {
 				edits.add(new Relabeling(oldName, relabelings.get(oldName)));
 			}
 		}
-		edits.addAll(insertions);
 		edits.addAll(deletions);
+		edits.addAll(insertions);
 
 		return edits;
 	}
@@ -104,12 +106,10 @@ public class PQGramRecommendation {
 	
 	// if tree has already been constructed, grab it; otherwise create it and add it
 	private static Tree getTree(String label, Map<String, Tree> builtTrees) {
-		if (builtTrees.containsKey(label)) {
-			return builtTrees.get(label);
+		if (!builtTrees.containsKey(label)) {
+			builtTrees.put(label, new Tree(label));
 		}
-		Tree tree = new Tree(label);
-		builtTrees.put(label, tree);
-		return tree;
+		return builtTrees.get(label);
 	}
 	
 	// hook up a child to its parent if not already done and return position; return -1 if already done
